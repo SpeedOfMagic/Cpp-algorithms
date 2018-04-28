@@ -1,1 +1,1 @@
-# C-algorithms
+# C++ algorithms
