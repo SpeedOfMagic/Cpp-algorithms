@@ -10,3 +10,4 @@ void unite(int a,int b){
     repr[a]=b;
     siz[b]+=siz[a];
 }
+bool connected(int a,int b){return find(a)==find(b);}
