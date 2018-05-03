@@ -4,13 +4,15 @@ struct vt{
     vt operator+(vt b){return {this->x+b.x,this->y+b.y};}
     vt operator-(vt b){return *this+(-b);}
     vt operator*(int b){return vt(this->x*b,this->y*b);}
-    int operator*(vt b){return this->x*b.x+this->y*b.y;}
+    int operator*(vt b){return this->x*b.x+this->y*b.y;} //Scalar multiplication
     vt operator/(int b){return vt(this->x/b,this->y/b);}
-    int operator%(vt b){return this->x*b.y - b.x*this->y;}
+    int operator%(vt b){return this->x*b.y - b.x*this->y;} //Vector multiplication
     bool operator==(vt b){return this->x==b.x&&this->y==b.y;}
     bool operator!=(vt b){return !((*this)==b);}
     bool collinear(vt b){return (*this)%b==0;}
+    bool perpendicular(vt b){return (*this)*b==0;}
     bool opposite(vt b){return this->collinear(b)&&(*this)*b<0;}
+    bool codirect(vt b){return this->collinear(b)&&(*this)*b>0;}
     double length(){return sqrt(this->x*this->x+this->y*this->y);}
     int sqLength(){return this->x*this->x+this->y*this->y;}
     vt(){}
