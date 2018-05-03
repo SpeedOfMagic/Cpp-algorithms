@@ -12,7 +12,7 @@ struct vt{
     bool collinear(vt b){return (*this)%b==0;}
     bool perpendicular(vt b){return (*this)*b==0;}
     bool opposite(vt b){return this->collinear(b)&&(*this)*b<0;}
-    bool codirect(vt b){return this->collinear(b)&&(*this)*b>0;}
+    bool codirect(vt b){return this->collinear(b)&&(*this)*b>=0;}
     double length(){return sqrt(this->x*this->x+this->y*this->y);}
     int sqLength(){return this->x*this->x+this->y*this->y;}
     vt(){}
