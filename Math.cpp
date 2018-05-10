@@ -1,4 +1,6 @@
 int gcd(int a,int b){
+    a=abs(a); b=abs(b);
+    if (a==0 && b==0) return 0;
     if (a>b)swap(a,b);
     if (a)return gcd(a,b%a);
     return b;
