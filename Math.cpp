@@ -15,7 +15,7 @@ bool prime(int a){
 }
 int pow(int a,int b,int mod){
     if(b==0)return 1;
-    if(b==1)return a;
+    if(b==1)return a%mod;
     int res=pow(a,b/2,mod);
     res=(res*res)%mod;
     if(b%2)return (a*res)%mod;
