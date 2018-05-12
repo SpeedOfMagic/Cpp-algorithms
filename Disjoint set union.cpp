@@ -1,4 +1,4 @@
-int repr[(int)3e5],siz[(int)3e5];
+vector<int> repr(3e5+1),siz(3e5+1, 1);
 int find(int a){
     if(repr[a]==a)return a;
     else return repr[a]=find(repr[a]);
