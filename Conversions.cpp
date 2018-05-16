@@ -1,4 +1,5 @@
 string inttostr(int a){
+    if(a==0)return "0";
     string res="";
     for(;a;a/=10)res+=a%10+'0';
     reverse(res.begin(),res.end());
