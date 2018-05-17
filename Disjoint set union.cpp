@@ -1,4 +1,5 @@
-vector<int> repr(3e5+1),siz(3e5+1, 1);
+const int N=3e5+1;
+vector<int> repr(N),siz(N, 1);
 int find(int a){
     if(repr[a]==a)return a;
     else return repr[a]=find(repr[a]);
@@ -11,3 +12,7 @@ void unite(int a,int b){
     siz[b]+=siz[a];
 }
 bool connected(int a,int b){return find(a)==find(b);}
+void init(){
+    for(int i=0;i<N;i++)
+        repr[i]=i;
+}
