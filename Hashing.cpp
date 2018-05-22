@@ -9,7 +9,7 @@ long long hashStr(long long prevHash, char curChar){
 }
 long long hashStr(string& s){
     long long res = 0;
-    for(char i:s)
+    for(char i : s)
         res = hashStr(res, i);
     return res;
 }
