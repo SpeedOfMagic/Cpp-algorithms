@@ -1,16 +1,13 @@
 struct trie{
-    int sz=0;
-    bool en=0;
-    hmap<char,trie*>nxt;
+    int size = 0;
+    bool end = 0;
+    hmap<char, trie*>nxt;
     trie(){}
-    trie* add(char c){
-        if(!nxt.count(c))nxt[c]=new trie();
-        nxt[c]->sz++;
-        return nxt[c];
-    }
-	void add(str s){
-		trie*cur=this;
-		for(char i:s)cur=add(i);
-		cur->en=1;
-	}
 };
+
+int size(trie* cur){
+	if (cur == nullptr)
+		return 0;
+	else
+		return cur -> size;
+}
