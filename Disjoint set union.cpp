@@ -23,6 +23,6 @@ bool connected(int a,int b){
 }
 
 void init(){
-    for(int i = 0;i < N;i++)
+    for(int i = 0; i < N; i++)
         repr[i] = i;
 }
