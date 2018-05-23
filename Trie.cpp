@@ -23,6 +23,6 @@ void add(str& s, trie* root){
         cur = cur -> nxt[i];
 		cur -> size++;
 	}
-	
+    
     cur -> end = 1;
 }
