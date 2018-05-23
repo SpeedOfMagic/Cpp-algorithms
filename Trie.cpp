@@ -13,8 +13,8 @@ int size(trie* cur) {
         return cur -> size;
 }
 
-void add(str s, trie* root){
-    trie* cur =r oot;
+void add(str& s, trie* root){
+    trie* cur = root;
 	cur -> size++;
 	
     for (char i : s) {
