@@ -41,8 +41,11 @@ const unsigned int requiredLength = 30;
 string inttobinary(int a) {
     string res = "";
     
+    if (a == 0)
+        res = "0";
+    
     for (int d = a; d > 0; d >>= 1){
-        if (d & 1 == 1)
+        if ((d & 1) == 1)
             res += "1";
         else
             res += "0";
@@ -57,7 +60,7 @@ string inttobinary(int a) {
 
 int binarytoint(string a){
     int res = 0;
-    int curPow = 1;
+    int curPow = 0;
     
     reverse(a.begin(), a.end());
     
