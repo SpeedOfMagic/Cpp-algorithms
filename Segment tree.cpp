@@ -6,7 +6,7 @@ int f(int a, int b) { //f - query you need to calculate, but for two values
 
 const int nothing = 0; //nothing means that f(x, nothing)=x
 
-struct segTreeNode{
+struct segTreeNode {
     int val = nothing;
 
     segTreeNode* left = nullptr;
@@ -42,7 +42,7 @@ void update(int nodeToUpdate, int value, int cur = 1, int ll = 1, int rr = tot) 
     segTree[cur].update();
 }
 
-int query(int l, int r, int cur=1, int ll=1, int rr=tot) {
+int query(int l, int r, int cur = 1, int ll = 1, int rr = tot) {
     if (l > r)
         return nothing;
     else if (l == ll && r == rr)
@@ -63,7 +63,7 @@ void init(vector<int> vals) {
     while (tot & (tot - 1))
         tot++;
 
-    segTree = vector<segTreeNode>(2*tot, segTreeNode(nothing));
+    segTree = vector<segTreeNode>(tot * 2, segTreeNode(nothing));
 
     for (int i = 0; i < n; i++)
         segTree[i + tot].val = vals[i];
