@@ -14,15 +14,9 @@ int gcd(int a, int b) {
     return b;
 }
 
+//used gcd
 int lcm(int a, int b) {
     return a / gcd(a, b) * b;
-}
-
-int fact(int a, int mod) {
-    if (a == 0)
-        return 1 % mod;
-    else
-        return (a * fact(a - 1, mod)) % mod;
 }
 
 int sgn(int a) {
@@ -48,6 +42,7 @@ bool prime(int a) {
     
     return 1;
 }
+
 int pow(int a, int b, int mod) {
     if (b == 0)
         return 1 % mod;
@@ -63,6 +58,7 @@ int pow(int a, int b, int mod) {
     
     return res;
 }
+
 vector<int> divisors(int a) {
     vector<int> result;
     
@@ -77,4 +73,41 @@ vector<int> divisors(int a) {
     
     sort(result.begin(), result.end());
     return result;
+}
+
+//uses divisors
+int euler(int a) {
+    if (a == 1)
+        return 0;
+    
+    return (int) divisors(a).size() - 2;
+}
+
+//may use euler, may use gcd
+int inv(int a, int mod, bool modPrime) {
+    if (a == mod)
+        return -1;
+    
+    int b = mod - 2;
+    
+    if(!modPrime){
+        b = euler(mod) - 1;
+        
+        if (gcd(a, mod) != 1)
+            return -1;
+    }
+    
+    return pow(a, b, mod);
+}
+
+int fact(int a, int mod) {
+    if (a == 0)
+        return 1 % mod;
+    else
+        return (a * fact(a - 1, mod)) % mod;
+}
+
+//uses fact, inv; you want to make array of factorials if you will use this function often
+int c(int k, int n, int mod, bool modPrime){
+    return ((fact(n, mod) * inv(fact(k, mod), mod, modPrime)) % mod * inv(fact(n - k, mod), mod, modPrime)) % mod;
 }
