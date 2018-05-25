@@ -2,9 +2,6 @@ int gcd(int a, int b) {
     a = abs(a);
     b = abs(b);
     
-    if (a == 0 && b == 0)
-        return 0;
-    
     if (a > b)
         swap(a, b);
     
@@ -43,22 +40,6 @@ bool prime(int a) {
     return 1;
 }
 
-int pow(int a, int b, int mod) {
-    if (b == 0)
-        return 1 % mod;
-    
-    if (b == 1)
-        return a % mod;
-    
-    int res = pow(a, b/2, mod);
-    res = (res * res) % mod;
-    
-    if (b % 2 == 1)
-        return (a * res) % mod;
-    
-    return res;
-}
-
 vector<int> divisors(int a) {
     vector<int> result;
     
@@ -83,20 +64,25 @@ int euler(int a) {
     return (int) divisors(a).size() - 2;
 }
 
-//may use euler, may use gcd
-int inv(int a, int mod, bool modPrime) {
-    if (a == mod)
-        return -1;
+int pow(int a, int b, int mod) {
+    if (b == 0)
+        return 1 % mod;
     
+    if (b == 1)
+        return a % mod;
+    
+    int res = pow(a, b/2, mod);
+    res = (res * res) % mod;
+    
+    if (b % 2 == 1)
+        return (a * res) % mod;
+    
+    return res;
+}
+
+//uses pow
+int inv(int a, int mod) {
     int b = mod - 2;
-    
-    if(!modPrime){
-        b = euler(mod) - 1;
-        
-        if (gcd(a, mod) != 1)
-            return -1;
-    }
-    
     return pow(a, b, mod);
 }
 
@@ -108,6 +94,6 @@ int fact(int a, int mod) {
 }
 
 //uses fact, inv; you want to make array of factorials if you will use this function often
-int c(int k, int n, int mod, bool modPrime){
-    return ((fact(n, mod) * inv(fact(k, mod), mod, modPrime)) % mod * inv(fact(n - k, mod), mod, modPrime)) % mod;
+int c(int k, int n, int mod){
+    return ((fact(n, mod) * inv(fact(k, mod), mod)) % mod * inv(fact(n - k, mod), mod)) % mod;
 }
