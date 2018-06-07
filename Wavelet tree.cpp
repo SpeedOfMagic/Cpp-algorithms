@@ -36,7 +36,7 @@ void init(waveletTree* nodeToInit) {
 
 }
 
-waveletTree* init(vector<int>& sequence, int mn = inf, int mx = -inf) {
+waveletTree* init(vector<int>& sequence, int mn = 1e9, int mx = -1e9) {
     if (mn > mx)
         for (int i : sequence) {
             mn = min(mn, i);
