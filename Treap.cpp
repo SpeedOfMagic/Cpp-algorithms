@@ -1,7 +1,6 @@
 const long long inf=4611686018427387903; //2^62-1
 
-int random() {
-    srand(time(0));
+int random() { //don't forget to use srand(time(0));
     return (rand() << 16) + rand();
 }
 
@@ -77,4 +76,12 @@ void prnt(treap* a) {
     prnt(a -> left);
     cout << (a -> val) << " ";
     prnt(a -> right);
+}
+
+treap* root = nullptr;
+
+void init(vector<int> vals) {
+    for (int i : vals) {
+        root = merge(root, new treap(i));   
+    }
 }
