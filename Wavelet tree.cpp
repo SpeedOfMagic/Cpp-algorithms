@@ -1,5 +1,3 @@
-const int inf = 1e9;
-
 int getRandom(int limit) { //returns random value in half-interval [0; limit);
     //don't forget to write srand(time(0));
     return ((rand()<<16) + rand()) % limit;
@@ -19,7 +17,7 @@ waveletTree* root;
 
 void init(waveletTree* nodeToInit) {
     int mn = nodeToInit -> l, mx = nodeToInit -> r;
-    
+
     if (mn != mx) { //this also means that current node is not a leaf
         int indexOfMiddle = getRandom(nodeToInit -> sequence.size());
         int middle = nodeToInit -> sequence[indexOfMiddle];
@@ -67,7 +65,7 @@ int equalTo(int q, int l, int r, waveletTree* cur = root) {
     if (l != 1)
         return equalTo(q, 1, r) - equalTo(q, 1, l - 1);
 
-    if (cur -> l == cur -> r) //this condition checks if current node is a leaf
+    if (cur -> l == cur -> r || r == 0) //this condition checks if current node is a leaf
         return r;
 
     int middle = cur -> left -> r;
