@@ -89,15 +89,28 @@ int inv(int a) {
 }
 
 vector<int> factorials = {1};
+vector<int> invFactorials = {1};
 void initFactorials(unsigned int n) { //calculates [1! % mod, 2! % mod, ... , n! % mod]
     for (unsigned int i = factorials.size(); i <= n; i++) {
         int d = factorials.back();
         factorials.push_back((d * i) % mod);
+        invFactorials.pb(inv(factorials.back()));
     }
 }
 
 //uses initFactorials, inv;
+void initInvFactorials(unsigned int n) {
+    initFactorials(n);
+    for (unsigned int i = invFactorials.size(); i <= n; i++) {
+        int d = inv(factorials[i]);
+        invFactorials.push_back(d);
+    }
+}
+
+//uses initFactorials, initInvFactorials;
 int c(int k, int n){
     initFactorials(n);
-    return ((factorials[n] * inv(factorials[k])) % mod * inv(factorials[n - k])) % mod;
+    initInvFactorials(n);
+    
+    return ((factorials[n] * invFactorials[k]) % mod * invFactorials[n - k]) % mod;
 }
