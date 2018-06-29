@@ -1,31 +1,39 @@
 int getRandom(int limit) { //returns random value in half-interval [0; limit);
     //don't forget to write srand(time(0));
-    return ((rand()<<16) + rand()) % limit;
+    return ((rand() << 16) + rand()) % limit;
 }
 
 struct waveletTree{
     waveletTree *left = nullptr, *right = nullptr;
-    int l = inf, r = -inf;
+    int l, r;
     vector<int> sequence;
-    vector<unsigned int> mapLeft, mapRight;
+    vector<unsigned int> mapLeftVector;
+
+    unsigned int mapLeft(int i) {
+        return mapLeftVector[i];
+    }
+    
+    unsigned int mapRight(int i) {
+        return i - mapLeftVector[i] + 1;
+    }
 
     waveletTree(int l, int r, vector<int>& sequence): l(l), r(r), sequence(sequence) {}
-    waveletTree(){}
+    waveletTree(int l, int r): l(l), r(r) {}
 };
 
 waveletTree* root;
 
 void init(waveletTree* nodeToInit) {
     int mn = nodeToInit -> l, mx = nodeToInit -> r;
-
+    
     if (mn != mx) { //this also means that current node is not a leaf
         int indexOfMiddle = getRandom(nodeToInit -> sequence.size());
         int middle = nodeToInit -> sequence[indexOfMiddle];
         if (middle == mx)
             middle--;
 
-        nodeToInit -> left = new waveletTree();
-        nodeToInit -> right = new waveletTree();
+        nodeToInit -> left = new waveletTree(mx, mn);
+        nodeToInit -> right = new waveletTree(mx, mn);
 
         for(int i : nodeToInit -> sequence) {
             if (i <= middle) {
@@ -37,8 +45,7 @@ void init(waveletTree* nodeToInit) {
                 nodeToInit -> right -> l = min(nodeToInit -> right -> l, i);
                 nodeToInit -> right -> r = max(nodeToInit -> right -> r, i);
             }
-            nodeToInit -> mapLeft.push_back(nodeToInit -> left -> sequence.size());
-            nodeToInit -> mapRight.push_back(nodeToInit -> right -> sequence.size());
+            nodeToInit -> mapLeftVector.push_back(nodeToInit -> left -> sequence.size());
         }
 
         init(nodeToInit -> left);
@@ -47,12 +54,12 @@ void init(waveletTree* nodeToInit) {
 
 }
 
-waveletTree* init(vector<int>& sequence, int mn = inf, int mx = -inf) {
-    if (mn > mx)
-        for (int i : sequence) {
-            mn = min(mn, i);
-            mx = max(mx, i);
-        }
+waveletTree* init(vector<int>& sequence) {
+    if (sequence.empty())
+        return nullptr;
+        
+    int mn = *min_element(sequence.begin(), sequence.end());
+    int mx = *max_element(sequence.begin(), sequence.end());
 
     waveletTree* nodeToInit = new waveletTree(mn, mx, sequence);
 
@@ -71,9 +78,9 @@ int equalTo(int q, int l, int r, waveletTree* cur = root) {
     int middle = cur -> left -> r;
 
     if (q <= middle)
-        return equalTo(q, l, cur -> mapLeft[r - 1], cur -> left);
+        return equalTo(q, l, cur -> mapLeft(r - 1), cur -> left);
     else
-        return equalTo(q, l, cur -> mapRight[r - 1], cur ->right);
+        return equalTo(q, l, cur -> mapRight(r - 1), cur ->right);
 }
 
 int lessThan(int q, int l, int r, waveletTree* cur = root) {
@@ -86,7 +93,7 @@ int lessThan(int q, int l, int r, waveletTree* cur = root) {
     int middle = cur -> left -> r;
 
     if (q <= middle)
-        return lessThan(q, l, cur -> mapLeft[r - 1], cur -> left);
+        return lessThan(q, l, cur -> mapLeft(r - 1), cur -> left);
     else
-        return cur -> mapLeft[r - 1] + lessThan(q, l, cur -> mapRight[r - 1], cur ->right);
+        return cur -> mapLeft(r - 1)+ lessThan(q, l, cur -> mapRight(r - 1), cur -> right);
 }
