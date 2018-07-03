@@ -6,11 +6,11 @@ long long hashChar(char c){
     return c - startingLetter + 1;   
 }
 
-long long hashStr(long long prevHash, char curChar){
-    return ((prevHash * 26) % mod2 + hashChar(curChar)) % mod2;
+long long hashStr(long long prevHash, char curChar) {
+    return ((prevHash * base) % mod2 + hashChar(curChar)) % mod2;
 }
 
-long long hashStr(string& s){
+long long hashStr(string& s) {
     long long res = 0;
     for(char i : s)
         res = hashStr(res, i);
