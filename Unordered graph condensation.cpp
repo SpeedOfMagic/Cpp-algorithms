@@ -51,7 +51,7 @@ void makeCondensation(v<pair<int, int>> E) { //E - edges of a graph
         if(col[i] == col[j])
             continue;
 
-        condensation[col[i]].pb(col[j]);
-        condensation[col[j]].pb(col[i]);
+        condensation[col[i]].push_back(col[j]);
+        condensation[col[j]].push_back(col[i]);
     }
 }
