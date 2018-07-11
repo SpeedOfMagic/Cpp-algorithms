@@ -1,5 +1,5 @@
-const int N = 3e5 + 1;
-vint g[N]; //init me
+const int N = 5e5 + 1;
+vector<int> g[N]; //init me
 
 set<int> g2Rev[N];
 bool vis[N];
@@ -30,19 +30,19 @@ void korasajuLike(int cur, bool todo) {
 vint condensation[N];
 
 void makeCondensation(v<pair<int, int>> E) { //E - edges of a graph
-    rep(i, 0, N)
+    for (int i = 0; i < N; i++) {
         vis[i] = 0;
+        col[i] = 0;
+    }
 
     korasajuLike(1, 0);
-
-    rep(i, 0, N)
-        col[i]=0;
 
     while(!l.empty()) {
         if(col[l.top()] == 0) {
             color++;
             korasajuLike(l.top(), 1);
         }
+        
         l.pop();
     }
 
