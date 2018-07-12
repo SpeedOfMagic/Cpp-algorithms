@@ -8,11 +8,10 @@ int kthAncestor[N][M];
 
 void precalc(int cur, int h = 0, int p = -1) {
     height[cur] = h;
-
+    
+    for (int j = 0; j < M; j++)
+        kthAncestor[cur][j] = -1;
     if (p != -1) {
-        for (int j = 0; j < M; j++)
-            kthAncestor[cur][j] = -1;
-
         kthAncestor[cur][0] = p;
         int pos = p;
         int k = 0;
