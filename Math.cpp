@@ -1,14 +1,8 @@
 int gcd(int a, int b) {
-    a = abs(a);
-    b = abs(b);
-
-    if (a > b)
-        swap(a, b);
-
-    if (a > 0)
-        return gcd(a, b % a);
-
-    return b;
+    if (min(a, b) != 0)
+        return gcd(min(a, b), max(a, b) % min(a, b)));
+	else
+		return max(a, b);
 }
 
 //used gcd
@@ -17,13 +11,10 @@ int lcm(int a, int b) {
 }
 
 int sgn(int a) {
-    if (a > 0)
-        return 1;
-
     if (a < 0)
         return -1;
-
-    return 0;
+	else
+		return !!a;
 }
 
 bool prime(int a) {
@@ -73,15 +64,14 @@ int pow(int a, int b) {
     if (b % 2)
         return (a * pow(a, b - 1)) % mod;
 
-    int res = pow(a, b/2);
+    int res = pow(a, b / 2);
 
     return (res * res) % mod;
 }
 
 //uses pow
 int inv(int a) {
-    int b = mod - 2;
-    return pow(a, b);
+    return pow(a, mod - 2);
 }
 
 vector<int> factorials = {1};
@@ -90,7 +80,6 @@ void initFactorials(unsigned int n) { //calculates [1! % mod, 2! % mod, ... , n!
     for (unsigned int i = factorials.size(); i <= n; i++) {
         int d = factorials.back();
         factorials.push_back((d * i) % mod);
-        invFactorials.pb(inv(factorials.back()));
     }
 }
 
@@ -105,7 +94,6 @@ void initInvFactorials(unsigned int n) {
 
 //uses initFactorials, initInvFactorials;
 int c(int k, int n){
-    initFactorials(n);
     initInvFactorials(n);
     
     return ((factorials[n] * invFactorials[k]) % mod * invFactorials[n - k]) % mod;
