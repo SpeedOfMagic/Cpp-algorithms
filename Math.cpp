@@ -1,6 +1,6 @@
 int gcd(int a, int b) {
     if (min(a, b) != 0)
-        return gcd(min(a, b), max(a, b) % min(a, b)));
+        return gcd(min(a, b), max(a, b) % min(a, b));
 	else
 		return max(a, b);
 }
