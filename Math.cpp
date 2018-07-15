@@ -69,17 +69,13 @@ const int mod = 1e9 + 7;
 int pow(int a, int b) {
     if (b == 0)
         return 1 % mod;
-
-    if (b == 1)
-        return a % mod;
+    
+    if (b % 2)
+        return (a * pow(a, b - 1)) % mod;
 
     int res = pow(a, b/2);
-    res = (res * res) % mod;
 
-    if (b % 2 == 1)
-        return (a * res) % mod;
-
-    return res;
+    return (res * res) % mod;
 }
 
 //uses pow
