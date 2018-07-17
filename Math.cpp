@@ -1,8 +1,5 @@
 int gcd(int a, int b) {
-    if (min(a, b) != 0)
-        return gcd(min(a, b), max(a, b) % min(a, b));
-	else
-		return max(a, b);
+	return (min(a, b) ? gcd(min(a, b), max(a, b) % min(a, b)) : max(a, b));
 }
 
 //used gcd
@@ -11,10 +8,7 @@ int lcm(int a, int b) {
 }
 
 int sgn(int a) {
-    if (a < 0)
-        return -1;
-	else
-		return !!a;
+	return (a < 0 ? -1 : !!a);
 }
 
 bool prime(int a) {
