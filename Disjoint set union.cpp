@@ -11,9 +11,12 @@ struct dsu {
     }
 
     void unite(int a, int b) {
+		if (connected(a, b))
+			return;
+		
         a = fin(a);
         b = fin(b);
-
+		
         if (siz[a] > siz[b])
             swap(a, b);
 
