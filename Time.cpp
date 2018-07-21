@@ -1,41 +1,60 @@
-/**
-* accepts both HH:MM and HH:MM:SS
-* returns {HH, MM} or {HH, MM, SS}
-**/
-vector<int> decomposeTime(string time) {
-    vector<int> res;
-    for (int i = 0; i < time.size(); i += 3) {
-        int v = (time[i] - '0') * 10 + (time[i + 1] - '0');
-        res.push_back(v);
+struct Time {
+    int hour;
+    int minute;
+    int second = 0;
+    bool usingSeconds = 0;
+
+    bool valid() {
+        return hour < 24 && minute < 60 && second < 60;
     }
 
-    return res;
-}
+    int timeInMinutes() { return hour * 60 + minute; }
+    int timeInSeconds() { return hour * 3600 + minute * 60 + second; }
 
-bool validTime(vector<int> timeDecomposed) {
-    return timeDecomposed[0] < 24 && timeDecomposed[1] < 60;
-}
+    void printRaw() {
+        cout << (hour < 10 ? "0" : "") << hour << ":"
+             << (minute < 10 ? "0" : "") << minute;
+        if (usingSeconds)
+            cout << ":" << (second < 10 ? "0" : "") << second;
+        cout << endl;
+    }
 
-bool validTime(string time) { return validTime(decomposeTime(time)); }
+    Time(string timeRaw) {
+        vector<int> res;
+        for (int i = 0; i < timeRaw.size(); i += 3) {
+            int v = (timeRaw[i] - '0') * 10 + (timeRaw[i + 1] - '0');
+            res.push_back(v);
+        }
 
-int timeInMinutes(string time) {
-    vector<int> decomposedTime = decomposeTime(time);
-    return decomposedTime[0] * 60 + decomposedTime[1];
-}
+        this -> hour = res[0];
+        this -> minute = res[1];
+        if (res.size() == 3) {
+            this -> second = res[2];
+            this -> usingSeconds = 1;
+        }
+    }
 
-int differenceInMinutes(string time1, string time2) {
-    return abs(timeInMinutes(time1) - timeInMinutes(time2));
-}
+    int operator-(Time other) {
+        if (other.second == 0 && this -> second == 0)
+            return abs(other.timeInMinutes() - this -> timeInMinutes());
+        else
+            return abs(other.timeInSeconds() - this -> timeInSeconds());
+    }
 
-int timeInSeconds(string time) {
-    vector<int> decomposedTime = decomposeTime(time);
-
-    int res = decomposedTime[0] * 3600 + decomposedTime[1] * 60;
-    if (decomposedTime.size() == 3)
-        res += decomposedTime[2];
-    return res;
-}
-
-int differenceInSeconds(string time1, string time2) {
-    return abs(timeInSeconds(time1) - timeInSeconds(time2));
-}
+    void operator++(int32_t k) { k = 0; k++;
+        if (usingSeconds) {
+            second++;
+            if (second == 60)
+                second = 0;
+            else
+                return;
+        }
+        minute++;
+        if (minute == 60) {
+            minute = 0;
+            hour++;
+            if (hour == 24)
+                hour = 0;
+        }
+    }
+};
