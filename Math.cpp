@@ -42,11 +42,25 @@ vector<int> divisors(int a) {
 }
 
 //uses divisors
-int euler(int a) {
-    if (a == 1)
-        return 0;
-
-    return (int) divisors(a).size() - 2;
+int euler(int d) {
+    int res = 1;
+    for (int i = 2; i <= ceil(sqrt(d)); i++)
+        if (d % i == 0) {
+            int a = i, b = 1;
+            
+            d /= i;
+            while (d % i == 0) {
+                d /= i;
+                a *= i;
+                b *= i;
+            }
+            
+            res *= a - b;
+        }
+    
+    if (d != 1)
+        res *= (d - 1);
+    return res;
 }
 
 const int mod = 1e9 + 7;
