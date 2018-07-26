@@ -1,18 +1,18 @@
-const int N = 5e5 + 1;
+const int N = 1e5 + 1;
 vector<int> g[N]; //init me
 
 set<int> g2Rev[N];
 bool vis[N];
 int col[N];
 stack<int> l;
-int color = 0;
+int curColor = -1;
 
-void korasajuLike(int cur, bool todo) {
+void kosarajuLike(int cur, bool todo) {
     if(todo){
-        col[cur] = color;
+        col[cur] = curColor;
         for(int i : g2Rev[cur])
-            if(col[i] == 0)
-                korasajuLike(i, todo);
+            if(col[i] == -1)
+                kosarajuLike(i, todo);
     } else {
         vis[cur] = 1;
         for (int i : g[cur]) {
@@ -20,29 +20,29 @@ void korasajuLike(int cur, bool todo) {
                 g2Rev[i].insert(cur);
 
             if(!vis[i])
-                korasajuLike(i, todo);
+                kosarajuLike(i, todo);
         }
         l.push(cur);
     }
 
 }
 
-vint condensation[N];
+vector<int> condensation[N];
 
-void makeCondensation(v<pair<int, int>> E) { //E - edges of a graph
+void makeCondensation(vector<pair<int, int>> E) { //E - edges of a graph
     for (int i = 0; i < N; i++) {
         vis[i] = 0;
-        col[i] = 0;
+        col[i] = -1;
     }
 
-    korasajuLike(1, 0);
+    kosarajuLike(1, 0);
 
     while(!l.empty()) {
         if(col[l.top()] == 0) {
-            color++;
-            korasajuLike(l.top(), 1);
+            curColor++;
+            kosarajuLike(l.top(), 1);
         }
-        
+
         l.pop();
     }
 
