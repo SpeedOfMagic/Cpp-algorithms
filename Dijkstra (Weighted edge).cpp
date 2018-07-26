@@ -3,8 +3,10 @@ vector<pair<int, int>> g[N]; //init me
 
 vector<int> dijkstra(int st) {
     vector<int> res(N, inf);
+	res[st] = 0;
+	
     priority_queue<pair<int, int>> nxt;
-    nxt.push({0, d});
+    nxt.push({0, st});
 
     while (!nxt.empty()) {
         int cur = nxt.top().second;

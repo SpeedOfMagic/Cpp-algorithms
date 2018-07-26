@@ -1,7 +1,8 @@
+const int R = 1000;
+const int C = 1000;
 
-const int N = 1000;
-const int M = 1000;
-int grid[N][M]; //init me
+int n; //init me
+int m; //init me
 
 bool valid(int r, int c) {
     return r >= 0 && r <= n - 1 && c >= 0 && c <= m - 1;
@@ -20,9 +21,9 @@ v<pair<int, int>> neighbours(int r, int c, bool sideOnly = 1) {
 }
 
 int getVertexNumber(int r, int c) {
-    return r * M + c;
+    return r * m + c;
 }
 
 pair<int, int> getCoordinate(int vertexNumber) {
-    return {vertexNumber / M, vertexNumber % M};
+    return {vertexNumber / m, vertexNumber % m};
 }
