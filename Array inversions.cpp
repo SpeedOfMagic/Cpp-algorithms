@@ -1,5 +1,5 @@
 vector<int> a;
-int calculateInversions(int l, int r) {
+long long calculateInversions(int l, int r) {
     if (l == r)
         return 0;
     else if (l + 1 == r) {
@@ -12,20 +12,20 @@ int calculateInversions(int l, int r) {
 
     int middle = (l + r) / 2;
 
-    int res = 0;
+    long long res = 0;
 
     res += calculateInversions(l, middle);
     res += calculateInversions(middle + 1, r);
 
     int p1 = l, p2 = middle + 1;
     int left = 0;
-    vint b;
+    vector<int> b;
     while (p1 <= middle || p2 <= r) {
         if (p2 <= r && (p1 > middle || a[p1] > a[p2])) {
-            b.pb(a[p2++]);
+            b.push_back(a[p2++]);
             left++;
         } else {
-            b.pb(a[p1++]);
+            b.push_back(a[p1++]);
             res += left;
         }
     }
