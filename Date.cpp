@@ -1,9 +1,7 @@
 const int daysInMonth[13] = {-1, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 const string startingDate = "1970-01-01";
 
-bool leap(int year) {
-    return (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0));
-}
+bool leap(int year) { return (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)); }
 
 struct Date {
     int day;
@@ -25,23 +23,19 @@ struct Date {
         return res;
     }
 
-    bool valid() {
-        int daysMax = getDaysInMonth();
-        return (day <= daysMax) && (this -> countDays() >= 0);
-    }
+    bool valid() { return (day <= getDaysInMonth()) && (this -> countDays() >= 0); }
 
     void printRaw(int format) {
         if (format == 0)
-            cout << year << "-" << (month < 10 ? "0" : "") << month
-                 << "-" << (day < 10 ? "0" : "") << day;
+            cout << year << "-" << (month < 10 ? "0" : "") << month << "-" << (day < 10 ? "0" : "") << day;
         else if (format == 1)
-            cout << (month < 10 ? "0" : "") << month << "-"
-                 << (day < 10 ? "0" : "") << day << "-" << year;
-        else
-            cout << (day < 10 ? "0" : "") << day << "-"
-                 << (month < 10 ? "0" : "") << month << "-" << year;
+            cout << (month < 10 ? "0" : "") << month << "-" << (day < 10 ? "0" : "") << day << "-" << year;
+        else if (format == 2)
+            cout << (day < 10 ? "0" : "") << day << "-" << (month < 10 ? "0" : "") << month << "-" << year;
         cout << endl;
     }
+
+    Date(int d, int m, int y): day(d), month(m), year(y) {}
 
     /**
     * format = 0: YYYY-MM-DD
@@ -49,44 +43,38 @@ struct Date {
     * format = 2: DD-MM-YYYY
     * returns {DD, MM, YYYY}
     **/
-    Date(string dateRaw, int format) {
+    Date(string dateRaw, unsigned int format) {
         int p = 0;
         if (format == 0) {
-            this -> year =
-            (dateRaw[p] - '0') * 1000 + (dateRaw[p+1] - '0') * 100 + (dateRaw[p+2] - '0') * 10 + (dateRaw[p+3] - '0');
-
+            year = (dateRaw[p] - '0') * 1000 + (dateRaw[p + 1] - '0') * 100 +
+                   (dateRaw[p + 2] - '0') * 10 + (dateRaw[p + 3] - '0');
             p = 5;
         }
 
         rep(z, 0, 2) {
             int v = (dateRaw[p] - '0') * 10 + (dateRaw[p + 1] - '0');
             if (z)
-                this -> day = v;
+                day = v;
             else
-                this -> month = v;
+                month = v;
             p += 3;
         }
 
         if (format > 0) {
             if (format == 2)
-                swap(this -> day, this -> month);
-            this -> year =
-            (dateRaw[p] - '0') * 1000 + (dateRaw[p+1] - '0') * 100 + (dateRaw[p+2] - '0') * 10 + (dateRaw[p+3] - '0');
+                swap(day, month);
+            year = (dateRaw[p] - '0') * 1000 + (dateRaw[p + 1] - '0') * 100 +
+                   (dateRaw[p + 2] - '0') * 10 + (dateRaw[p + 3] - '0');
         }
     }
 
-    bool operator==(Date other) {
-        return this -> day == other.day && this -> month == other.month && this -> year == other.year;
-    }
+    bool operator==(Date other) { return day == other.day && month == other.month && year == other.year; }
 
-    bool operator<(Date other) {
-        int c1 = this -> countDays(), c2 = other.countDays();
-        return c1 < c2;
-    }
+    bool operator!=(Date other) { return !((*this) == other); }
 
-    bool operator>(Date other) {
-        return other < (*this);
-    }
+    bool operator<(Date other) { return this -> countDays() < other.countDays(); }
+
+    bool operator>(Date other) { return other < (*this); }
 
     void operator++(int32_t k) { k = 0; k++;
         int daysMax = getDaysInMonth();

@@ -1,21 +1,20 @@
-
 struct dsu {
     vector<int> repr;
     vector<int> siz;
 
-    int fin(int a) {
+    int _find(int a) {
         if (repr[a] == a)
             return a;
         else
-            return repr[a] = fin(repr[a]);
+            return repr[a] = _find(repr[a]);
     }
 
     void unite(int a, int b) {
 		if (connected(a, b))
 			return;
 		
-        a = fin(a);
-        b = fin(b);
+        a = _find(a);
+        b = _find(b);
 		
         if (siz[a] > siz[b])
             swap(a, b);
@@ -26,7 +25,7 @@ struct dsu {
     }
 
     bool connected(int a, int b) {
-        return fin(a) == fin(b);
+        return _find(a) == _find(b);
     }
 
     dsu(int n) {
