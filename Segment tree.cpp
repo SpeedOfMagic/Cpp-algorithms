@@ -1,33 +1,26 @@
-//you want to set 2 functions: f(int a, int b) and update(int val) and 1 parameter: nothing
+//you want to set 2 functions: f(int a, int b) and segTreeNode::update(int val) and 1 parameter: nothing
 
-int f(int a, int b) { //f - query you need to calculate, but for two values
-    return a + b;
-}
-
-const int nothing = 0; //nothing means that f(x, nothing)=x
+const int nothing = 0; //nothing means that f(x, nothing) = x
 
 struct segTreeNode {
     int val = nothing;
 
-    segTreeNode* left = nullptr;
-    segTreeNode* right = nullptr;
+    segTreeNode(int _val) : val(_val) {}
 
-    segTreeNode(int val) : val(val) {}
-
-    void update(int val) { //function that updates node based on val
-        this -> val += val;
-    }
-
-    void update() { //function that updates node based on children
-        this -> val = f(this -> left -> val, this -> right -> val);
+    void update(int _val) { //function that updates node based on val
+        this -> val += _val;
     }
 };
 
 vector<segTreeNode> segTree;
 int n, tot;
 
+int f(int a, int b) { //f - query you need to calculate, but for two values
+    return segTree[a].val + segTree[b].val;
+}
+
 void update(int nodeToUpdate, int value, int cur = 1, int ll = 1, int rr = tot) {
-    if (ll == nodeToUpdate && nodeToUpdate == rr){
+    if (ll == rr) {
         segTree[cur].update(value);
         return;
     }
@@ -35,25 +28,22 @@ void update(int nodeToUpdate, int value, int cur = 1, int ll = 1, int rr = tot) 
     int p = (ll + rr) / 2;
 
     if (nodeToUpdate <= p)
-        update(nodeToUpdate, value, cur*2, ll, p);
+        update(nodeToUpdate, value, cur * 2, ll, p);
     else
-        update(nodeToUpdate,value,cur*2+1,p+1,rr);
+        update(nodeToUpdate, value, cur * 2 + 1, p + 1, rr);
 
-    segTree[cur].update();
+    segTree[cur] = f(cur * 2, cur * 2 + 1);
 }
 
 int query(int l, int r, int cur = 1, int ll = 1, int rr = tot) {
     if (l > r)
         return nothing;
-    else if (l == ll && r == rr)
+	
+    if (l == ll && r == rr)
         return segTree[cur].val;
 
-    int p = (ll + rr) / 2;
-
-    return f(
-        query(l, min(r,p), cur * 2, ll, p),
-        query(max(l, p + 1), r, cur * 2 + 1, p + 1, rr)
-    );
+    int mid = (ll + rr) / 2;
+    return f(query(l, min(r, mid), cur * 2, ll, mid), query(max(l, mid + 1), r, cur * 2 + 1, mid + 1, rr));
 }
 
 void init(vector<int> vals) {
@@ -68,10 +58,6 @@ void init(vector<int> vals) {
     for (int i = 0; i < n; i++)
         segTree[i + tot].val = vals[i];
 
-    for (int i = tot - 1; i > 0; i--){
-        segTree[i].left = &segTree[i*2];
-        segTree[i].right = &segTree[i*2+1];
-
-        segTree[i].update();
-    }
+    for (int i = tot - 1; i; i--)
+        segTree[i] = f(i * 2, i * 2 + 1);
 }

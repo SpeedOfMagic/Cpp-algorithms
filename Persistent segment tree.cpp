@@ -5,14 +5,13 @@ struct segTree {
 };
 
 int n;
-
 v<segTree*> version = {nullptr};
 
 int query(int l, int r, segTree *cur, int ll = 0, int rr = n - 1) {
-    if (cur == nullptr || l > r)
+    if (l > r)
         return 0;
     if (l == ll && r == rr)
-        return cur -> val;
+        return value(cur);
     int mid = (ll + rr) / 2;
     return query(l, min(r, mid), cur -> left, ll, mid) + query(max(l, mid + 1), r, cur -> right, mid + 1, rr);
 }

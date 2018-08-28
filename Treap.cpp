@@ -1,6 +1,7 @@
 const long long inf=4611686018427387903; //2^62-1
 
-int random() { //don't forget to use srand(time(0));
+int random() {
+	srand(time(0));
     return (rand() << 16) + rand();
 }
 
@@ -19,15 +20,13 @@ struct treap{
 int size(treap* a) {
     if(a == nullptr)
         return 0;
-    else
-        return a -> size;
+    return a -> size;
 }
 
 int minInTree(treap* a) {
     if(a == nullptr)
         return inf;
-    else
-        return a -> minInTree;
+    return a -> minInTree;
 }
 
 void update(treap* a){
@@ -52,9 +51,9 @@ treap* merge(treap* v1, treap* v2){
     }
 }
 
-pair<treap*,treap*> split(treap* w, int k){
+pair<treap*, treap*> split(treap* w, int k) {
     if(w == nullptr)
-        return {nullptr,nullptr};
+        return {nullptr, nullptr};
     
     if(size(w -> left) >= k) {
         auto tmp = split(w -> left, k);
@@ -81,7 +80,6 @@ void prnt(treap* a) {
 treap* root = nullptr;
 
 void init(vector<int> vals) {
-    for (int i : vals) {
+    for (int i : vals)
         root = merge(root, new treap(i));   
-    }
 }

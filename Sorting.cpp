@@ -14,7 +14,7 @@ void mergesort(int l, int r) {
     merge(a + l, a + cur + 1, a + cur + 1, a + r + 1, b);
     
     for (int i = l; i <= r; i++)
-        a[i] = b[i-l];
+        a[i] = b[i - l];
 }
 
 void quicksort(int l, int r) {
@@ -41,7 +41,7 @@ void quicksort(int l, int r) {
         rr--;
     }
     if (l < rr)
-        quicksort(l,rr);
+        quicksort(l, rr);
     if (ll < r)
-        quicksort(ll,r);
+        quicksort(ll, r);
 }

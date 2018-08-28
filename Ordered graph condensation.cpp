@@ -42,13 +42,12 @@ void makeCondensation() {
             kosaraju(i, 0);
 
     while (!l.empty()) {
-        int p = l.top();
-        l.pop();
-		
-        if (color[p] == 0) {
+        if (color[l.top()] == 0) {
             curColor++;
-            kosaraju(p, 1);
+            kosaraju(l.top(), 1);
         }
+		
+        l.pop();
     }
     curColor++;
 

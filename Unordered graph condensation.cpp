@@ -35,7 +35,9 @@ void makeCondensation(vector<pair<int, int>> E) { //E - edges of a graph
         col[i] = -1;
     }
 
-    kosarajuLike(1, 0);
+	for (int i = 0; i < N; i++)
+        if (!vis[i])
+            kosarajuLike(i, 0);
 
     while(!l.empty()) {
         if(col[l.top()] == 0) {
