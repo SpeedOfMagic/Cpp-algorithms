@@ -29,7 +29,7 @@ void kosarajuLike(int cur, bool todo) {
 
 vector<int> condensation[N];
 
-void makeCondensation(vector<pair<int, int>> E) { //E - edges of a graph
+void makeCondensation(vector<pair<int, int>> edges) {
     for (int i = 0; i < N; i++) {
         vis[i] = 0;
         col[i] = -1;
@@ -48,7 +48,7 @@ void makeCondensation(vector<pair<int, int>> E) { //E - edges of a graph
         l.pop();
     }
 
-    for (auto edge : E) {
+    for (auto edge : edges) {
         int i = edge.first, j = edge.second;
         if(col[i] == col[j])
             continue;

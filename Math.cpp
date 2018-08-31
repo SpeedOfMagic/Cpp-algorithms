@@ -1,15 +1,8 @@
-int gcd(int a, int b) {
-	return (min(a, b) ? gcd(min(a, b), max(a, b) % min(a, b)) : max(a, b));
-}
+int gcd(int a, int b) { return (min(a, b) ? gcd(min(a, b), max(a, b) % min(a, b)) : max(a, b)); }
 
-//used gcd
-int lcm(int a, int b) {
-    return a / gcd(a, b) * b;
-}
+int lcm(int a, int b) { return a / __gcd(a, b) * b; }
 
-int sgn(int a) {
-	return (a < 0 ? -1 : !!a);
-}
+int sgn(int a) { return (a < 0 ? -1 : !!a); }
 
 bool prime(int a) {
     if (a < 2)
@@ -28,8 +21,8 @@ bool prime(int a) {
 vector<int> divisors(int a) {
     vector<int> result;
 
-    for (int i = 1; i <= ceil(sqrt(a)); i++){
-        if (a % i == 0){
+    for (int i = 1; i <= ceil(sqrt(a)); i++) {
+        if (a % i == 0) {
             result.push_back(i);
 
             if (a / i != i)
@@ -37,7 +30,6 @@ vector<int> divisors(int a) {
         }
     }
 
-    sort(result.begin(), result.end());
     return result;
 }
 
@@ -65,22 +57,20 @@ int euler(int d) {
 
 const int mod = 1e9 + 7;
 
-int pow(int a, int b) {
+int ppow(int a, int b) {
     if (b == 0)
         return 1 % mod;
     
     if (b % 2)
         return (a * pow(a, b - 1)) % mod;
 
-    int res = pow(a, b / 2);
+    int res = ppow(a, b / 2);
 
     return (res * res) % mod;
 }
 
-//uses pow
-int inv(int a) {
-    return pow(a, mod - 2);
-}
+//uses ppow
+int inv(int a) { return ppow(a, mod - 2); }
 
 vector<int> factorials = {1};
 vector<int> invFactorials = {1};
@@ -94,14 +84,12 @@ void initFactorials(unsigned int n) { //calculates [1! % mod, 2! % mod, ... , n!
 //uses initFactorials, inv;
 void initInvFactorials(unsigned int n) {
     initFactorials(n);
-    for (unsigned int i = invFactorials.size(); i <= n; i++) {
-        int d = inv(factorials[i]);
-        invFactorials.push_back(d);
-    }
+    for (unsigned int i = invFactorials.size(); i <= n; i++)
+        invFactorials.push_back(inv(factorials[i]););
 }
 
 //uses initFactorials, initInvFactorials;
-int c(int k, int n){
+int c(int k, int n) {
     initInvFactorials(n);
     
     return ((factorials[n] * invFactorials[k]) % mod * invFactorials[n - k]) % mod;

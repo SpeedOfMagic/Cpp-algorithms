@@ -64,12 +64,8 @@ int binarytoint(string a){
     
     reverse(a.begin(), a.end());
     
-    for(char i : a) {
-        if (i == '1')
-            res += (1 << curPow);
-        
-        curPow++;
-    }
+    for(char i : a)
+		res += (i == '1') * (1 << curPow++);
     
     return res;
 }

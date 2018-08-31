@@ -9,7 +9,6 @@ struct treap{
     treap* left = nullptr;
     treap* right = nullptr;
     int w, val, size = 1;
-    int minInTree;
     treap(int val):
         w(random()),
         val(val),
@@ -17,30 +16,19 @@ struct treap{
     {}
 };
 
-int size(treap* a) {
-    if(a == nullptr)
-        return 0;
-    return a -> size;
-}
+int size(treap* a) { return ((a == nullptr) ? 0 : a -> size); }
 
-int minInTree(treap* a) {
-    if(a == nullptr)
-        return inf;
-    return a -> minInTree;
-}
-
-void update(treap* a){
+void update(treap* a) {
     a -> size = size(a -> left) + size(a -> right) + 1;
-    a -> minInTree = min(minInTree(a -> left), min(a -> val, minInTree(a -> right)));
 }
 
-treap* merge(treap* v1, treap* v2){
+treap* merge(treap* v1, treap* v2) {
     if(v1 == nullptr)
         return v2;
     if(v2 == nullptr)
         return v1;
     
-    if(v1 -> w > v2->w){
+    if(v1 -> w > v2 -> w) {
         v1 -> right = merge(v1 -> right, v2);
         update(v1);
         return v1;

@@ -1,13 +1,14 @@
 struct segTree {
     int val;
-    segTree *left = nullptr, *right = nullptr;
-    segTree(int v):val(v) {}
+    segTree* left = nullptr;
+	segTree* right = nullptr;
+    segTree(int v) : val(v) {}
 };
 
 int n;
 v<segTree*> version = {nullptr};
 
-int query(int l, int r, segTree *cur, int ll = 0, int rr = n - 1) {
+int query(int l, int r, segTree* cur, int ll = 0, int rr = n - 1) {
     if (l > r)
         return 0;
     if (l == ll && r == rr)
@@ -22,17 +23,9 @@ int value(segTree* cur) {
     return cur -> val;
 }
 
-segTree* left(segTree* cur) {
-    if (cur == nullptr)
-        return nullptr;
-    return cur -> left;
-}
+segTree* left(segTree* cur) { return ((cur == nullptr) ? nullptr : cur -> left); }
 
-segTree* right(segTree* cur) {
-    if (cur == nullptr)
-        return nullptr;
-    return cur -> right;
-}
+segTree* right(segTree* cur) { return ((cur == nullptr) ? nullptr : cur -> right); }
 
 void update(int num, int val) {
     segTree* parallel = version.back();
