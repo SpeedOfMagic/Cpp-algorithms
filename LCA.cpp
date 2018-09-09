@@ -6,8 +6,8 @@ int height[N];
 const int M = 20;
 int kthAncestor[N][M];
 
-void precalc(int cur, int h = 0, int p = -1) {
-    height[cur] = h;
+void calc(int cur, int p) {
+    height[cur] = ((p == -1) ? 0 : height[p] + 1);
 
     for (int j = 0; j < M; j++)
         kthAncestor[cur][j] = -1;
@@ -21,10 +21,13 @@ void precalc(int cur, int h = 0, int p = -1) {
             k++;
         }
     }
+}
 
-    for (int i : g[cur])
+void precalc(int cur, int p = -1) {
+	calc(cur, p);
+	for (int i : g[cur])
         if (i != p)
-            precalc(i, h + 1, cur);
+            precalc(i, cur);
 }
 
 int getKthAncestor(int v, unsigned int distance) {
@@ -60,8 +63,9 @@ int lca(int v, int u) {
 }
 
 int distance(int v, int u, int theirLCA = -1) {
-    if (theirLCA == -1)
-        theirLCA = lca(v, u);
+	return height[v] + height[u] - 2 * height[(theirLCA == -1) ? lca(v, u) : theirLCA];
+}
 
-    return height[v] + height[u] - 2 * height[theirLCA];
+bool isAncestor(int posAncestor, int v) {
+	return (getKthAncestor(v, height[v] - height[posAncestor]) == posAncestor);
 }
