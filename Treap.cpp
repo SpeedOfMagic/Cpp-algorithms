@@ -1,19 +1,9 @@
-const long long inf=4611686018427387903; //2^62-1
-
-int random() {
-	srand(time(0));
-    return (rand() << 16) + rand();
-}
-
+int random() { return (rand() << 16) + rand(); }
 struct treap{
     treap* left = nullptr;
     treap* right = nullptr;
     int w, val, size = 1;
-    treap(int val):
-        w(random()),
-        val(val),
-        minInTree(val)
-    {}
+    treap(int _val): w(random()), val(_val) {}
 };
 
 int size(treap* a) { return ((a == nullptr) ? 0 : a -> size); }

@@ -1,71 +1,45 @@
 const int N = 1e5 + 1;
-
-vector<int> g[N]; //init me
-int height[N];
-
-const int M = 20;
+vector<int> t[N]; //init me
+int h[N];
+const int M = 17;
 int kthAncestor[N][M];
-
-void calc(int cur, int p) {
-    height[cur] = ((p == -1) ? 0 : height[p] + 1);
-
-    for (int j = 0; j < M; j++)
-        kthAncestor[cur][j] = -1;
-    if (p != -1) {
-        kthAncestor[cur][0] = p;
-        int pos = p;
-        int k = 0;
-        while (kthAncestor[pos][k] != -1) {
-            kthAncestor[cur][k + 1] = kthAncestor[pos][k];
-            pos = kthAncestor[pos][k];
-            k++;
-        }
+inline void precalc(int cur = 1, int p = -1) {
+    h[cur] = (p != -1) ? (h[p] + 1) : 0;
+    int d = p;
+    for (int k = 0; d != -1; k++) {
+        kthAncestor[cur][k] = d;
+        d = kthAncestor[d][k];
     }
-}
 
-void precalc(int cur, int p = -1) {
-	calc(cur, p);
-	for (int i : g[cur])
+    for (int i : t[cur])
         if (i != p)
             precalc(i, cur);
 }
 
-int getKthAncestor(int v, unsigned int distance) {
-    int k = 0;
-    while (distance && k < M) {
-        if (distance & 1)
-            v = kthAncestor[v][k];
-        distance >>= 1;
-        k++;
-    }
-
-    return v;
-}
-
-int lca(int v, int u) {
-    if (height[v] > height[u])
+inline int lca(int v, int u) {
+    if (h[v] > h[u])
         swap(v, u);
 
-    int d = height[u] - height[v];
-
-    u = getKthAncestor(u, d);
-
-    int k = M - 1;
-
-    while (v != u)
-        if (kthAncestor[v][k] != kthAncestor[u][k] || k == 0) {
-            v = kthAncestor[v][k];
+    for (int k = 0, d = h[u] - h[v]; d; k++, d >>= 1)
+        if (d & 1)
             u = kthAncestor[u][k];
+
+    for (int k = M - 1; u != v;)
+        if (kthAncestor[u][k] != kthAncestor[v][k] || !k) {
+            u = kthAncestor[u][k];
+            v = kthAncestor[v][k];
         } else
             k--;
+    return u;
+}
 
+int dist(int v, int u) { return h[v] + h[u] - 2 * h[lca(v, u)]; }
+
+int getKthAncestor(int v, unsigned int distance) {
+    for (int k = 0; distance && k < M; k++, distance >>= 1)
+        if (distance & 1)
+            v = kthAncestor[v][k];
     return v;
 }
 
-int distance(int v, int u, int theirLCA = -1) {
-	return height[v] + height[u] - 2 * height[(theirLCA == -1) ? lca(v, u) : theirLCA];
-}
-
-bool isAncestor(int posAncestor, int v) {
-	return (getKthAncestor(v, height[v] - height[posAncestor]) == posAncestor);
-}
+bool isAncestor(int posAncestor, int v) { return getKthAncestor(v, h[v] - h[posAncestor]) == posAncestor; }

@@ -60,12 +60,10 @@ const int mod = 1e9 + 7;
 int ppow(int a, int b) {
     if (b == 0)
         return 1 % mod;
-    
-    if (b % 2)
-        return (a * pow(a, b - 1)) % mod;
+    else if (b % 2)
+        return (a * ppow(a, b - 1)) % mod;
 
     int res = ppow(a, b / 2);
-
     return (res * res) % mod;
 }
 
@@ -85,7 +83,7 @@ void initFactorials(unsigned int n) { //calculates [1! % mod, 2! % mod, ... , n!
 void initInvFactorials(unsigned int n) {
     initFactorials(n);
     for (unsigned int i = invFactorials.size(); i <= n; i++)
-        invFactorials.push_back(inv(factorials[i]););
+        invFactorials.push_back(inv(factorials[i]));
 }
 
 //uses initFactorials, initInvFactorials;

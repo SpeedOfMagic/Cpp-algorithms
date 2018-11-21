@@ -4,9 +4,7 @@ struct Time {
     int second = 0;
     bool usingSeconds = 0;
 
-    bool valid() {
-        return hour < 24 && minute < 60 && second < 60;
-    }
+    bool valid() { return hour < 24 && minute < 60 && second < 60; }
 
     int timeInMinutes() { return hour * 60 + minute; }
     int timeInSeconds() { return hour * 3600 + minute * 60 + second; }

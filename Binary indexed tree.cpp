@@ -1,25 +1,19 @@
-int lsb(int a) { return a & -a; }
+inline int lsb(int a) { return a & -a; }
 
 struct fenwick {
     vector<int> tree;
 
-    fenwick(int n) { tree = vint(n); }
+    fenwick(int n) { tree = vector<int>(n, 0); }
 
-    int query(int l, int r) {
-        if (l != 1)
-            return query(1, r) - query(1, l - 1);
+    inline int query(int r) {
         int res = 0;
-        while (r) {
+        for (; r; r -= lsb(r))
             res += tree[r];
-            r -= lsb(r);
-        }
         return res;
     }
 
-    void update(int pos, int change) {
-        while (pos <= sz(tree)) {
+    inline void update(int pos, int change) {
+        for (; pos < (int) tree.size(); pos += lsb(pos))
             tree[pos] += change;
-            pos += lsb(pos);
-        }
     }
 };

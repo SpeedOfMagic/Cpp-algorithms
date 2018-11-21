@@ -6,7 +6,7 @@ vector<int> dijkstra(int st) {
 	res[st] = 0;
 	
     priority_queue<pair<int, int>> nxt;
-    nxt.push({0, st});
+    nxt.push({-res[st], st});
 
     while (!nxt.empty()) {
         int cur = nxt.top().second;
