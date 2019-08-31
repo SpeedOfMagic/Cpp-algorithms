@@ -1,12 +1,12 @@
 const int N = 1e5 + 1;
 vector<int> t[N]; //init me
+
 int h[N];
 const int M = 17;
-int kthAncestor[N][M];
+int kthAncestor[N][M]; //init me with -1
 inline void precalc(int cur = 1, int p = -1) {
     h[cur] = (p != -1) ? (h[p] + 1) : 0;
-    int d = p;
-    for (int k = 0; d != -1; k++) {
+    for (int k = 0, d = p; d != -1; k++) {
         kthAncestor[cur][k] = d;
         d = kthAncestor[d][k];
     }
@@ -42,4 +42,8 @@ int getKthAncestor(int v, unsigned int distance) {
     return v;
 }
 
-bool isAncestor(int posAncestor, int v) { return getKthAncestor(v, h[v] - h[posAncestor]) == posAncestor; }
+inline bool isAncestor(int posAncestor, int v) {
+    if (h[v] < h[posAncestor])
+        return 0;
+    return getKthAncestor(v, h[v] - h[posAncestor]) == posAncestor;
+}

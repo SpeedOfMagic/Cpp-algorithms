@@ -1,103 +1,135 @@
-class pt {
-    public:
-        int x;
-        int y;
-
-        pt() {}
-        pt(int _x, int _y) : x(_x), y(_y) {}
-        pt(pt p1, pt p2) {
-            this -> x = p2.x - p1.x;
-            this -> y = p2.y - p1.y;
-        }
-
-        pt operator-() { return pt(-this -> x, -this -> y); }
-        pt operator+(pt b) { return pt(this -> x + b.x, this -> y + b.y); }
-        pt operator-(pt b) { return *this + (-b);}
-        pt operator*(int b) { return pt(this -> x * b, this -> y * b); }
-        pt operator/ (int b) { return pt(this -> x / b, this -> y / b); }
-
-        int operator*(pt b) {return this -> x * b.x + this -> y * b.y;}  // Scalar multiplication
-        int operator%(pt b) {return this -> x * b.y - this -> y * b.x;}  // Vector multiplication
-
-        bool operator==(pt b) { return this -> x == b.x && this -> y == b.y; }
-        bool operator!=(pt b) { return !((*this) == b); }
-
-        bool collinear(pt b) {return (*this) % b == 0;}
-        bool perpendicular(pt b) {return (*this) * b == 0;}
-        bool opposite(pt b) {return this -> collinear(b) && (*this) * b < 0;}
-        bool codirect(pt b) {return this -> collinear(b) && !this -> opposite(b);}
-
-        double length() {return sqrt(sqLength());}
-        int sqLength() {return this -> x * this -> x + this -> y * this -> y;}
-        double polar() {return atan2(this -> y, this -> x);}
+typedef long long T;
+struct pt {
+	T x, y;
+	
+	pt() {}
+	pt(T _x, T _y) : x(_x), y(_y) {}
+	pt(pt a, pt b) : x(b.x - a.x), y(b.y - a.y) {}
+	pt operator-(pt o) const { return { x - o.x, y - o.y }; }
+	
+	T sqDist(pt o) { return (o.x - x) * (o.x - x) + (o.y - y) * (o.y - y); }
+	T operator*(pt o) const { return x * o.x + y * o.y; }
+	T operator%(pt o) const { return x * o.y - y * o.x; }
+	
+	long double dist(pt o) {
+		return sqrt(sqDist(o));
+	}		
 };
 
-struct line : public pt {
-    int a, b, c; // a * x + b * y + c = 0
+struct line {
+	T a, b, c;
 
-    line(int _a, int _b, int _c = 0) : a(_a), b(_b), c(_c) {
-        this -> x = -b;
-        this -> y = a;
-    }
+	line(T A, T B, T C) : a(A), b(B), c(C) {}
 
-    line(pt v, int _c = 0) : a(v.y), b(-v.x), c(_c) {
-        this -> x = v.x;
-        this -> y = v.y;
-    }
+	line(pt A, pt B) {
+		a = A.y - B.y;
+		b = B.x - A.x;
+		c = -(a * A.x + b * A.y);
+	}
 
-    bool operator==(line other) { return (this -> a == other.a) && (this -> b == other.b) && (this -> c == other.c); }
+	bool intersect(line l, pt& ans) {
+		if (abs((l.a * b - l.b * a)) < EPS)
+			return false;
+ 
+		ans.x = (l.b * c - l.c * b) / (-l.b * a + l.a * b);
+		ans.y = (l.c * a - l.a * c) / (-l.b * a + l.a * b);
+		return true;
+	}
+	
+	T ord(pt p) { return p.x * a + p.b * y + c; }
 };
 
-struct seg {
-    pt p1;
-    pt p2;
-
-    seg(pt _p1, pt _p2) : p1(_p1), p2(_p2) {}
-};
-
-bool intersects(line l1, line l2) { return (l1 == l2 || !l1.collinear(l2)); }
-bool intersects(line l, pt p) { return l.a * p.x + l.b * p.y + l.c == 0; }
-///bool intersects(seg s, pt p)
-///bool intersects(seg s1, seg s2)
-
-pt intersectionPoint(line l1, line l2) {
-    assert(intersects(l1, l2) && !(l1 == l2));
-    int x = (l1.b * l2.c - l1.c * l2.b) / (l1.a * l2.b - l1.b * l2.a);
-    int y = -(l2.a * x + l2.c) / l2.b;
-    return pt(x, y);
-    /**
-    l1.a * x + l1.b * y + l1.c = 0
-    l2.a * x + l2.b * y + l2.c = 0
-
-    y = -(l2.a * x + l2.c) / l2.b
-
-    l1.a * x + l1.b * -(l2.a * x + l2.c) / l2.b + l1.c = 0
-    l1.a * x - l1.b * (l2.a * x + l2.c) / l2.b + l1.c = 0
-    l1.a * x - l1.b * l2.a * x / l2.b - l1.b * l2.c / l2.b + l1.c = 0
-    l1.a * x - l1.b * l2.a / l2.b * x - l1.b * l2.c / l2.b + l1.c = 0
-    l1.a * l2.b * x - l1.b * l2.a * x - l1.b * l2.c + l1.c * l2.b = 0
-    (l1.a * l2.b - l1.b * l2.a) * x - l1.b * l2.c + l1.c * l2.b = 0
-    x = (l1.b * l2.c - l1.c * l2.b) / (l1.a * l2.b - l1.b * l2.a)
-    **/
+line perpBisector(pt a, pt b) {
+	pt mid2 = {a.x + b.x, a.y + b.y};
+	line l = {a, b};
+	return {l.b * 2, -l.a * 2, -(l.b * mid2.x - l.a * mid2.y)};
 }
 
-pt move(pt cur, pt direction) { return cur + direction; }
-line move(line cur, pt direction) { return line(cur, cur.c + pt(cur.x, cur.y) * direction); }
+struct circle {
+	pt o;
+	T r;
+	
+	circle(pt O, T R) : o(O), r(R) {}
+	
+	circle(pt a, pt b, pt c) {
+		line l1 = perpBisector(a, b), l2 = perpBisector(b, c);
+		assert(l1.intersect(l2, o));
+		r = o.dist(a);
+	}
+};
 
-pt reflect(pt cur, pt center = pt(0, 0)) { return move(-(cur - center), center); }
+int sgn(T a) { return (0 < a) - (a < 0); }
 
-pt perp(line axis) { return pt(-axis.y, axis.x); }
+bool segPoint(pt a, pt b, pt p) { return sgn((a - p) % (b - p)) == 0 && sgn((a - p) * (b - p)) <= 0; }
 
-pt perp(pt cur, line axis) {
-    line d = line(perp(axis));
-    d.c = -(d.b * cur.y + d.a * cur.x);
-    return pt(cur, intersectionPoint(d, axis));
+bool segSeg(pt a, pt b, pt c, pt d) {
+	if (belongs(a, b, c) || belongs(a, b, d) || belongs(c, d, a) || belongs(c, d, b))
+		return 1;
+	pt ab = { a, b }, bc = { b, c }, bd = { b, d }, da = { d, a }, db = { d, b }, cd = { c, d };
+	return (sgn(ab % bc) != sgn(ab % bd) && sgn(cd % da) != sgn(cd % db));
 }
 
-pt reflect(pt cur, line axis) { return move(cur, perp(cur, axis) * 2);}
+bool in(vector<pt> pol, pt p) { //uses belongs, segSeg
+	int n = pol.size();
+	int cnt = 0;
+	for (int i = 0; i < n; i++) {
+		pt a = pol[i], b = pol[(i + 1) % n];
+		if (a.y > b.y)
+			swap(a, b);
+		if (belongs(a, b, p))
+			return true;
+		else if (a.y == p.y)
+			continue;
+		else if (segSeg(a, b, p, { 1000000000, p.y }))
+			cnt++;
+	}
+	return cnt % 2;
+}
 
-///double dist(pt p, line l)
-///double dist(pt p, seg s)
-///double dist(line l1, line l2)
-///double dist(seg s1, seg s2)
-///pt<double> rotate(pt cur, double angle)
+bool polSeg(vector<pt>& pol, pt a, pt b) {
+	if (in(pol, a) || in(pol, b))
+		return 1;
+ 
+	rep(i, 0, sz(pol)) {
+		pt c = pol[i], d = pol[(i + 1) % sz(pol)];
+		if (segSeg(a, b, c, d))
+			return 1;
+	}
+	return 0;
+}
+
+vector<pt> convexHull(vector<pt> p) { //makes hull in clockwise order
+	sort(p.begin(), p.end(), [](pt a, pt b) { return (a.x == b.x) ? a.y < b.y : a.x < b.x; });
+	int n = p.size();
+	if (n < 3)
+		return p;
+	vector<pt> hull;
+	rep(i, 0, n) {
+		while (sz(hull) >= 2) {
+			pt a = hull[sz(hull) - 2], b = hull.back(), c = p[i];
+			pt ab = { a, b }, bc = { b, c };
+			if (sgn(ab % bc) >= 0)
+				hull.pop_back();
+			else
+				break;
+		}
+		hull.pb(p[i]);
+	}
+
+	hull.pb(p[n - 2]);
+	int lim = sz(hull);
+	for (int i = n - 3; i >= 0; i--) {
+		while (sz(hull) >= lim) {
+			pt a = hull[sz(hull) - 2], b = hull.back(), c = p[i];
+			pt ab = { a, b }, bc = { b, c };
+			if (sgn(ab % bc) >= 0)
+				hull.pop_back();
+			else
+				break;
+		}
+		hull.pb(p[i]);
+	}
+	hull.pop_back();
+	
+	return hull;
+}

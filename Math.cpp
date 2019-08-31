@@ -2,7 +2,7 @@ int gcd(int a, int b) { return (min(a, b) ? gcd(min(a, b), max(a, b) % min(a, b)
 
 int lcm(int a, int b) { return a / __gcd(a, b) * b; }
 
-int sgn(int a) { return (a < 0 ? -1 : !!a); }
+int sgn(int a) { return (0 < a) - (a < 0); }
 
 bool prime(int a) {
     if (a < 2)
@@ -91,4 +91,35 @@ int c(int k, int n) {
     initInvFactorials(n);
     
     return ((factorials[n] * invFactorials[k]) % mod * invFactorials[n - k]) % mod;
+}
+
+vector<int> gaussMod(vector<vector<int>> eq) {
+	rep(i, 0, n)
+		rep(j, 0, n)
+			eq[i][j] %= mod;
+			
+	int n = eq.size();
+	assert(n + 1 == eq[0].size());
+	for (int j = 0; j < n; j++) {
+		int toUse = j;
+		for (int i = j + 1; i < n; i++)
+			if (eq[i][j] > eq[toUse][j])
+				toUse = i;
+		
+		swap(eq[toUse], eq[j]);
+		if (eq[j][j]) {
+			int div = inv(eq[j][j]);
+			rep(k, j, n)
+				eq[j][k] = (eq[j][k] * div) % mod;
+			
+			assert(eq[j][j] == 1);
+			rep(i, j + 1, n) {
+				int coefToAdd = mod - eq[i][j];
+				rep(k, j, n)
+					eq[i][k] = (eq[i][k] + (coefToAdd * eq[j][k]) % mod) % mod;
+				
+				
+			}
+		}
+	}
 }

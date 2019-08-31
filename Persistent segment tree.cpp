@@ -1,56 +1,52 @@
-struct segTree {
-    int val = 0;
-    segTree* left = nullptr;
-	segTree* right = nullptr;
-    segTree(int v) : val(v) {}
-	segTree() {}
-};
+const int N = 1 << 17;
+const int D = 18;
+const int Q = 200001;
+int val[Q][D];
+int Left[Q][D];
+int Right[Q][D];
 
-int n;
-v<segTree*> version = {nullptr};
+void init() {
+	rep(i, 0, D) {
+		val[0][i] = 0;
+		Left[0][i] = 0;
+		Right[0][i] = 0;
+	}
+}
 
-int value(segTree* cur) { return (cur == nullptr) ? 0 : cur -> val; }
-
-segTree* left(segTree* cur) { return ((cur == nullptr) ? nullptr : cur -> left); }
-segTree* right(segTree* cur) { return ((cur == nullptr) ? nullptr : cur -> right); }
-
-int query(int l, int r, segTree* cur, int ll = 1, int rr = n) {
+int query(int l, int r, int curVersion, int d = 0, int ll = 1, int rr = N) {
     if (l > r)
         return 0;
     if (l == ll && r == rr)
-        return value(cur);
-    int mid = (ll + rr) / 2;
-    return query(l, min(r, mid), cur -> left, ll, mid) +
-		   query(max(l, mid + 1), r, cur -> right, mid + 1, rr);
+        return val[curVersion][d];
+    int mid = (ll + rr) >> 1;
+    return query(l, min(r, mid), Left[curVersion][d], d + 1, ll, mid) +
+		   query(max(l, mid + 1), r, Right[curVersion][d], d + 1, mid + 1, rr);
 }
 
-void update(int num, int val) {
-    segTree* parallel = version.back();
-    version.pb(new segTree(value(parallel) + val));
-    segTree* cur = version.back();
-    stack<segTree*> route;
+int versionCount = 1;
+void update(int num, int v, int prevVersion) {
+	int parallel = prevVersion;
 
-    int ll = 1, rr = n;
-    while (ll != rr) {
-        route.push(cur);
-        int mid = (ll + rr) / 2;
+	int cur = versionCount;
+    int ll = 1, rr = N;
+    for (int d = 0; ll != rr; d++) {
+        int mid = (ll + rr) >> 1;
         if (num > mid) {
             ll = mid + 1;
-            cur -> left = left(parallel);
-            parallel = right(parallel);
-            cur -> right = new segTree();
-            cur = cur -> right;
+			Left[cur][d] = Left[parallel][d];
+			Right[cur][d] = cur;
+			parallel = Right[parallel][d];
         } else {
             rr = mid;
-            cur -> right = right(parallel);
-            parallel = left(parallel);
-            cur -> left = new segTree();
-            cur = cur -> left;
+			Left[cur][d] = cur;
+			Right[cur][d] = Right[parallel][d];
+			parallel = Left[parallel][d];
         }
     }
-	cur -> val += val;
-    while (!route.empty()) {
-        route.top() -> val = value(left(route.top())) + value(right(route.top()));
-        route.pop();
-    }
+
+	val[cur][D - 1] = v;
+	for (int i = D - 2; i >= 0; i--)
+		val[cur][i] = val[Left[cur][i]][i + 1] + val[Right[cur][i]][i + 1];
+
+	versionCount++;
 }

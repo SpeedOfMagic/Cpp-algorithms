@@ -42,7 +42,7 @@ void makeCondensation() {
             kosaraju(i, 0);
 
     while (!l.empty()) {
-        if (color[l.top()] == 0) {
+        if (color[l.top()] == -1) {
             curColor++;
             kosaraju(l.top(), 1);
         }
@@ -50,9 +50,9 @@ void makeCondensation() {
         l.pop();
     }
     curColor++;
-
+	
     for (int i = 0; i < N; i++)
         for (int j : g[i])
             if (color[i] != color[j])
-                condensation[color[i]].pb(color[j]);
+                condensation[color[i]].push_back(color[j]);
 }

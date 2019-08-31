@@ -6,17 +6,7 @@ struct segTree {
     int f(int a, int b) { return max(a, b); }
 
     void update(int pos, int value) {
-        int cur = 1, l = 1, r = val.size() >> 1;
-        while (l != r) {
-            int mid = (l + r) / 2;
-            if (pos <= mid) {
-                cur <<= 1;
-                r = mid;
-            } else {
-                cur = cur << 1 | 1;
-                l = mid + 1;
-            }
-        }
+        int cur = val.size() + pos - 1;
         for (val[cur] = value, cur >>= 1; cur; cur >>= 1)
             val[cur] = f(val[cur << 1], val[cur << 1 | 1]);
     }
@@ -29,8 +19,14 @@ struct segTree {
             return val[cur];
 
         int mid = (ll + rr) >> 1;
-        return f(query(l, min(r, mid), cur << 1, ll, mid), query(max(l, mid + 1), r, cur << 1 | 1, mid + 1, rr));
+        return f(query(l, min(r, mid), cur << 1, ll, mid),
+				 query(max(l, mid + 1), r, cur << 1 | 1, mid + 1, rr));
     }
+	
+	segTree(int _n) {
+		for (n = _n; n & (n - 1); n++) {}
+        val = vector<int>(n * 2, nothing);
+	}
 
     segTree(vector<int> arr) {
         for (n = arr.size(); n & (n - 1); n++) {}

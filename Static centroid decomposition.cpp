@@ -5,7 +5,7 @@ bitset<N> added;
 
 int calcSize(int cur, int p) {
     siz[cur] = 1;
-    for (int i : t[cur])
+    for (auto i : t[cur])
         if (!added.test(i) && i != p)
             siz[cur] += calcSize(i, cur);
     return siz[cur];

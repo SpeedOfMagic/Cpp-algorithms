@@ -8,15 +8,11 @@ struct waveletTree{
     int l, r;
     vector<unsigned int> mapLeftVector;
 
-    unsigned int mapLeft(int i) {
-        return mapLeftVector[i];
-    }
+    unsigned int mapLeft(int i) { return mapLeftVector[i]; }
     
-    unsigned int mapRight(int i) {
-        return i - mapLeftVector[i] + 1;
-    }
+    unsigned int mapRight(int i) { return i - mapLeftVector[i] + 1; }
 
-    waveletTree(int l, int r): l(l), r(r) {}
+    waveletTree(int _l, int _r): l(_l), r(_r) {}
 };
 
 waveletTree* root;
