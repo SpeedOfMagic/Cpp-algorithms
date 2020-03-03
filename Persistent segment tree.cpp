@@ -1,12 +1,12 @@
-const int N = 1 << 17;
 const int D = 18;
+const int N = 1 << (D - 1);
 const int Q = 200001;
 int val[Q][D];
 int Left[Q][D];
 int Right[Q][D];
 
 void init() {
-	rep(i, 0, D) {
+	for(int i = 0; i < D; ++i) {
 		val[0][i] = 0;
 		Left[0][i] = 0;
 		Right[0][i] = 0;

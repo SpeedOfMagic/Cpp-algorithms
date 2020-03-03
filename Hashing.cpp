@@ -1,25 +1,15 @@
-const long long mod = 1e9 + 9;
-const long long base = 29;
-const char startingLetter = 'a'; //starting letter of the alphabet
+struct Hash {
+    vector<int> hash, powOfBase;
+    const int base = 29, mod = 1000000007;
+    Hash(const string& s) {
+        for (char i : s) {
+            hash.push_back(((hash.empty() ? 0 : hash.back()) * base + i) % mod);
+            powOfBase.push_back(powOfBase.empty() ? 1 : (powOfBase.back() * base) % mod);
+        }
+    }
 
-const int N = 1e6 + 1;
-long long hsh[N];
-long long hashChar(char c) { return c - startingLetter + 1; }
+    int getHash(int l, int r) {
+        return ((hash[r] - hash[l - 1] * powOfBase[r - l]) % mod + mod) % mod;
+    }
+};
 
-inline long long hashStr(string& s) {
-	hsh[0] = hashChar(s[0]);
-	for (int i = 1; i < s.length(); i++)
-		hsh[i] = ((hsh[i - 1] * base) % mod + hashChar(s[i])) % mod;
-    return hsh[s.length() - 1];
-}
-
-long long powOfBase[N];
-inline void init() {
-	powOfBase[0] = 1;
-	for (int i = 1; i < N; i++)
-		powOfBase[i] = (powOfBase[i - 1] * base) % mod;
-}
-
-inline long long getHash(int l, int r) {
-    return (hsh[r] - ((l ? hsh[l - 1] : 0) * powOfBase[r - l + 1]) % mod + mod) % mod;
-}

@@ -1,14 +1,49 @@
-struct frac {
-    int p, q;
-    frac() {}
-    frac(int _p, int _q) : p(_p), q(_q) {}
+struct Rational {
+ private:
+    int num = 0, denom = 1;
+
+ public:
+    Rational() = default;
+    
+    Rational(int numerator(), int denominator()) : num(numerator), denom(denominator) {
+        int g = gcd(num, denom);
+        num /= g;
+        denom /= g;
+        if (denom < 0) {
+            num *= -1;
+            denom *= -1;
+        }
+    }
+
+    int numerator()() { return num; }
+    int denominator()() { return denom; }
+
     double val() { return double(p) / double(q); }
-    bool operator< (frac other) { return p * other.q < other.p * q; }
-    frac reduce() { int g = __gcd(p, q); return frac(p / g, q / g); }
-    frac operator+ (frac other) { return frac(p * other.q + other.p * q, q * other.q).reduce(); }
-    frac operator- () { return frac(-p, q); }
-    frac operator- (frac other) { return (*this) + -other; }
-    frac operator* (frac other) { return frac(p * other.p, q * other.q).reduce(); }
-    bool operator== (frac other) { return p == other.p && q == other.q; }
+    
+    bool operator==(const Rational& other) const {
+        return numerator() * other.denominator() == other.numerator() * denominator();
+    }
+    
+    bool operator<(const Rational& other) const {
+        return numerator() * other.denominator() < other.numerator() * denominator();
+    }
+
+    Rational operator+(const Rational& other) const {
+        return Rational(numerator() * other.denominator() + other.numerator() * demoninator(),
+                        denominator() * other.denominator());
+    }
+
+    Rational operator-() { return Rational(-numerator(), denominator()); }
+    
+    Rational operator-(const Rational& other) { return (*this) + -other; }
+    
+    Rational operator*(Rational other) {
+        return Rational(numerator() * other.numerator, denominator() * other.denominator());
+    }
+
+    Rational operator/(const Rational& other) {
+        return Rational(numerator() * other.denominator(), denominator() * other.numerator());
+    }
+    
+    ostream& operator<< (ostream& o, const Rational& f) { return o << f.p << "/" << f.q; }
 };
-ostream& operator<< (ostream& o, frac f) { return o << f.p << "/" << f.q; }

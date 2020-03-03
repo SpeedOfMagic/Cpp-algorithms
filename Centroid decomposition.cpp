@@ -6,8 +6,8 @@ bitset<N> added;
 
 int calcSize(int cur, int p) {
     siz[cur] = 1;
-    for (int i : t[cur])
-        if (!added.test(cur) && i != p)
+    for (auto i : t[cur])
+        if (!added.test(i) && i != p)
             siz[cur] += calcSize(i, cur);
     return siz[cur];
 }
@@ -17,20 +17,19 @@ void make_centroid(int cur = 1, int p = -1) {
     int pr = -1;
     for (bool again = 1; again; ) {
         again = 0;
-        for (int i : t[cur]) {
+        for (int i : t[cur])
             if (!added.test(i) && i != pr && siz[i] > lim) {
                 pr = cur;
                 cur = i;
                 again = 1;
                 break;
             }
-        }
     }
 
-	T[cur].pb(cur);
+    T[cur].push_back(cur);
     if (p != -1)
         for (int i : T[p])
-            T[cur].pb(i);
+            T[cur].push_back(i);
     added.set(cur);
     for (int i : t[cur])
         if (!added.test(i))

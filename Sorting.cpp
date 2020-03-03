@@ -18,30 +18,43 @@ void mergesort(int l, int r) {
 }
 
 void quicksort(int l, int r) {
+    if (l >= r)
+        return;
     srand(time(0));
     
     int ind = ((rand() << 16) + rand()) % (r - l) + l;
     int val = a[ind];
-    int ll = l;
-    int rr = r;
+    int ll = l, rr = r;
     
-    while (1) {
+    while (ll <= rr) {
         while (a[ll] < val)
-            ll++;
-        
+            ll++;    
         while (a[rr] > val)
             rr--;
         
-        if (ll>rr)
+        if (ll > rr)
             break;
         
         swap(a[ll], a[rr]);
-        
-        ll++;
-        rr--;
+        ++ll;
+        --rr;
     }
-    if (l < rr)
-        quicksort(l, rr);
-    if (ll < r)
-        quicksort(ll, r);
+    
+    quicksort(l, rr);
+    quicksort(ll, r);
+}
+
+template<typename Iter, typename Converter>
+void counting_sort(Iter begin, Iter end, Converter converter, size_t MAX = 0) {
+    using T = typename std::iterator_traits<Iter>::value_type;
+    if (MAX == 0)
+        for (auto i = begin; i != end; ++i)
+            MAX = std::max(MAX, static_cast<size_t>(converter(*i)));
+    std::vector<std::list<T>> buckets(MAX + 1);
+    for (auto i = begin; i != end; ++i)
+        buckets[converter(*i)].push_back(*i);
+    Iter i = begin;
+    for (const auto& sorted_elements : buckets)
+        for (const T& element : sorted_elements)
+            (*(i++)) = element;
 }
