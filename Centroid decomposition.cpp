@@ -26,10 +26,10 @@ void make_centroid(int cur = 1, int p = -1) {
             }
     }
 
-	T[cur].pb(cur);
+    T[cur].push_back(cur);
     if (p != -1)
         for (int i : T[p])
-            T[cur].pb(i);
+            T[cur].push_back(i);
     added.set(cur);
     for (int i : t[cur])
         if (!added.test(i))

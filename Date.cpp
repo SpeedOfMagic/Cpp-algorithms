@@ -68,15 +68,15 @@ struct Date {
         }
     }
 
-    bool operator==(Date other) { return day == other.day && month == other.month && year == other.year; }
+    bool operator==(const Date& other) { return tie(day, month, year) == tie(other.day, other.month, other.year); }
 
-    bool operator!=(Date other) { return !((*this) == other); }
+    bool operator!=(const Date& other) { return !((*this) == other); }
 
-    bool operator<(Date other) { return this -> countDays() < other.countDays(); }
+    bool operator<(const Date& other) { return this -> countDays() < other.countDays(); }
 
-    bool operator>(Date other) { return other < (*this); }
+    bool operator>(const Date& other) { return other < (*this); }
 
-    void operator++(int32_t k) { k = 0; k++;
+    void operator++() {
         int daysMax = getDaysInMonth();
         day++;
         if (day > daysMax) {
@@ -87,5 +87,11 @@ struct Date {
                 year++;
             }
         }
+    }
+
+    void operator++(int) {
+        Date temp = *this;
+        this -> operator++();
+        return temp;
     }
 };

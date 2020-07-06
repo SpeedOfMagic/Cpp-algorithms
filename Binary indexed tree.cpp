@@ -11,8 +11,8 @@ struct fenwick {
         return res;
     }
 
-    inline void update(int pos, int change) {
-        for (; pos < (int) tree.size(); pos += lsb(pos))
+    inline void update(unsigned int pos, int change) {
+        for (; pos < tree.size(); pos += lsb(pos))
             tree[pos] += change;
     }
 };

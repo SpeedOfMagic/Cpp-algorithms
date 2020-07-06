@@ -1,7 +1,7 @@
 long long calculateInversions(int l, int r, const vector<int>& a) {
-    if (l == r)
+    if (l == r) {
         return 0;
-    else if (l + 1 == r) {
+    } else if (l + 1 == r) {
         if (a[l] > a[r]) {
             swap(a[l], a[r]);
             return 1;
@@ -10,10 +10,8 @@ long long calculateInversions(int l, int r, const vector<int>& a) {
     }
 
     int middle = (l + r) / 2;
-    long long res = 0;
-
-    res += calculateInversions(l, middle, a);
-    res += calculateInversions(middle + 1, r, a);
+    long long res = calculateInversions(l, middle, a)
+                  + calculateInversions(middle + 1, r, a);
 
     int p1 = l, p2 = middle + 1;
     int left = 0;
@@ -27,7 +25,7 @@ long long calculateInversions(int l, int r, const vector<int>& a) {
             res += left;
         }
     }
-    rep(i, l, r + 1)
+    for (int i = l; i <= r; ++i)
         a[i] = b[i - l];
 
     return res;

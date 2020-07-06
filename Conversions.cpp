@@ -3,22 +3,22 @@ string inttostr(int a) {
         return "0";
     
     string res = "";
-    for(int d = a; d > 0; d /= 10)
+    for (int d = a; d > 0; d /= 10)
         res += d % 10 + '0';
     
     reverse(res.begin(), res.end());
     return res;
 }
 
-int strtoint(string a) {
+int strtoint(const string& a) {
     int res = 0;
-    for(char i : a)
+    for (char i : a)
         res = res * 10 + (i - '0');
     
     return res;
 }
 
-double strtod(string a) {
+double strtod(const string& a) {
     double res = 0;
     double afterDot = 1;
     bool dotBegins = 0;
@@ -36,8 +36,6 @@ double strtod(string a) {
 }
 
 const unsigned int requiredLength = 30;
-//means that length of binary must be no lower than requiredLength
-
 string inttobinary(int a) {
     string res = "";
     
@@ -58,14 +56,13 @@ string inttobinary(int a) {
     return res;
 }
 
-int binarytoint(string a){
+int binarytoint(const string& a){
     int res = 0;
     int curPow = 0;
-    
-    reverse(a.begin(), a.end());
-    
+
+    reverse(a.begin(), a.end());    
     for(char i : a)
-		res += (i == '1') * (1 << curPow++);
+        res += (i == '1') * (1 << curPow++);
     
     return res;
 }

@@ -1,8 +1,4 @@
-int getRandom(int limit) { //returns random value in half-interval [0; limit);
-    //don't forget to write srand(time(0));
-    return ((rand() << 16) + rand()) % limit;
-}
-
+mt19937 rng(random_device{}());
 struct waveletTree{
     waveletTree *left = nullptr, *right = nullptr;
     int l, r;
@@ -21,7 +17,7 @@ void init(waveletTree* nodeToInit, vector<int>& sequence) {
     int mn = nodeToInit -> l, mx = nodeToInit -> r;
     
     if (mn != mx) { //this also means that current node is not a leaf
-        int indexOfMiddle = getRandom(sequence.size());
+        int indexOfMiddle = rng() % sequence.size();
         int middle = sequence[indexOfMiddle];
         if (middle == mx)
             middle--;
@@ -93,3 +89,4 @@ int lessThan(int q, int l, int r, waveletTree* cur = root) {
     else
         return cur -> mapLeft(r - 1)+ lessThan(q, l, cur -> mapRight(r - 1), cur -> right);
 }
+

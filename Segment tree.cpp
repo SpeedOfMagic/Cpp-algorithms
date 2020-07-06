@@ -3,7 +3,7 @@ struct segTree {
     vector<int> val;
     int n;
 
-    int f(int a, int b) { return max(a, b); }
+    inline int f(int a, int b) { return max(a, b); }
 
     void update(int pos, int value) {
         int cur = val.size() + pos - 1;

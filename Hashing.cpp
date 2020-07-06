@@ -65,3 +65,4 @@ class Hasher : public vector<RingNumber> {
 
     inline RingNumber getHash(size_t l) const { return getHash(l, size() - 1); }
 };
+
