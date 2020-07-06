@@ -51,14 +51,14 @@ pair<treap*, treap*> split(treap* t, int k) {
  
     if (siz(t -> l) >= k) {
         pair<treap*, treap*> res = split(t -> l, k);
-        t -> l = res.sc;
+        t -> l = res.second;
         t -> upd();
-        return {res.fs, t};
+        return {res.first, t};
     } else {
         pair<treap*, treap*> res = split(t -> r, k - siz(t -> l) - 1);
-        t -> r = res.fs;
+        t -> r = res.first;
         t -> upd();
-        return {t, res.sc};
+        return {t, res.second};
     }
 }
  

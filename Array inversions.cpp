@@ -1,5 +1,4 @@
-vector<int> a;
-long long calculateInversions(int l, int r) {
+long long calculateInversions(int l, int r, const vector<int>& a) {
     if (l == r)
         return 0;
     else if (l + 1 == r) {
@@ -11,11 +10,10 @@ long long calculateInversions(int l, int r) {
     }
 
     int middle = (l + r) / 2;
-
     long long res = 0;
 
-    res += calculateInversions(l, middle);
-    res += calculateInversions(middle + 1, r);
+    res += calculateInversions(l, middle, a);
+    res += calculateInversions(middle + 1, r, a);
 
     int p1 = l, p2 = middle + 1;
     int left = 0;

@@ -20,16 +20,13 @@ bool prime(int a) {
 
 vector<int> divisors(int a) {
     vector<int> result;
-
-    for (int i = 1; i <= ceil(sqrt(a)); i++) {
+    for (int i = 1; i * i <= a; ++i) {
         if (a % i == 0) {
             result.push_back(i);
-
             if (a / i != i)
                 result.push_back(a / i);
         }
     }
-
     return result;
 }
 
@@ -93,33 +90,3 @@ int c(int k, int n) {
     return ((factorials[n] * invFactorials[k]) % mod * invFactorials[n - k]) % mod;
 }
 
-vector<int> gaussMod(vector<vector<int>> eq) {
-	rep(i, 0, n)
-		rep(j, 0, n)
-			eq[i][j] %= mod;
-			
-	int n = eq.size();
-	assert(n + 1 == eq[0].size());
-	for (int j = 0; j < n; j++) {
-		int toUse = j;
-		for (int i = j + 1; i < n; i++)
-			if (eq[i][j] > eq[toUse][j])
-				toUse = i;
-		
-		swap(eq[toUse], eq[j]);
-		if (eq[j][j]) {
-			int div = inv(eq[j][j]);
-			rep(k, j, n)
-				eq[j][k] = (eq[j][k] * div) % mod;
-			
-			assert(eq[j][j] == 1);
-			rep(i, j + 1, n) {
-				int coefToAdd = mod - eq[i][j];
-				rep(k, j, n)
-					eq[i][k] = (eq[i][k] + (coefToAdd * eq[j][k]) % mod) % mod;
-				
-				
-			}
-		}
-	}
-}

@@ -11,9 +11,7 @@ struct pt {
 	T operator*(pt o) const { return x * o.x + y * o.y; }
 	T operator%(pt o) const { return x * o.y - y * o.x; }
 	
-	long double dist(pt o) {
-		return sqrt(sqDist(o));
-	}		
+	long double dist(pt o) { return sqrt(sqDist(o)); }		
 };
 
 struct line {
@@ -28,7 +26,7 @@ struct line {
 	}
 
 	bool intersect(line l, pt& ans) {
-		if (abs((l.a * b - l.b * a)) < EPS)
+		if (abs((l.a * b - l.b * a)) < 1e-9)
 			return false;
  
 		ans.x = (l.b * c - l.c * b) / (-l.b * a + l.a * b);
@@ -36,7 +34,7 @@ struct line {
 		return true;
 	}
 	
-	T ord(pt p) { return p.x * a + p.b * y + c; }
+	T ord(pt p) { return p.x * a + p.y * b + c; }
 };
 
 line perpBisector(pt a, pt b) {
@@ -63,7 +61,7 @@ int sgn(T a) { return (0 < a) - (a < 0); }
 bool segPoint(pt a, pt b, pt p) { return sgn((a - p) % (b - p)) == 0 && sgn((a - p) * (b - p)) <= 0; }
 
 bool segSeg(pt a, pt b, pt c, pt d) {
-	if (belongs(a, b, c) || belongs(a, b, d) || belongs(c, d, a) || belongs(c, d, b))
+	if (segPoint(a, b, c) || segPoint(a, b, d) || segPoint(c, d, a) || segPoint(c, d, b))
 		return 1;
 	pt ab = { a, b }, bc = { b, c }, bd = { b, d }, da = { d, a }, db = { d, b }, cd = { c, d };
 	return (sgn(ab % bc) != sgn(ab % bd) && sgn(cd % da) != sgn(cd % db));
