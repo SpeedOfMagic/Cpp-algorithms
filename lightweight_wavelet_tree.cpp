@@ -1,6 +1,6 @@
 mt19937 rng(random_device{}());
-struct waveletTree{
-    waveletTree *left = nullptr, *right = nullptr;
+struct WaveletTree{
+    WaveletTree *left = nullptr, *right = nullptr;
     int l, r;
     vector<unsigned int> mapLeftVector;
 
@@ -8,12 +8,12 @@ struct waveletTree{
     
     unsigned int mapRight(int i) { return i - mapLeftVector[i] + 1; }
 
-    waveletTree(int _l, int _r): l(_l), r(_r) {}
+    WaveletTree(int _l, int _r): l(_l), r(_r) {}
 };
 
-waveletTree* root;
+WaveletTree* root;
 
-void init(waveletTree* nodeToInit, vector<int>& sequence) {
+void init(WaveletTree* nodeToInit, vector<int>& sequence) {
     int mn = nodeToInit -> l, mx = nodeToInit -> r;
     
     if (mn != mx) { //this also means that current node is not a leaf
@@ -22,8 +22,8 @@ void init(waveletTree* nodeToInit, vector<int>& sequence) {
         if (middle == mx)
             middle--;
 
-        nodeToInit -> left = new waveletTree(mx, mn);
-        nodeToInit -> right = new waveletTree(mx, mn);
+        nodeToInit -> left = new WaveletTree(mx, mn);
+        nodeToInit -> right = new WaveletTree(mx, mn);
         
         vector<int> sequenceLeft;
         vector<int> sequenceRight;
@@ -46,21 +46,21 @@ void init(waveletTree* nodeToInit, vector<int>& sequence) {
 
 }
 
-waveletTree* init(vector<int>& sequence) {
+WaveletTree* init(vector<int>& sequence) {
     if (sequence.empty())
         return nullptr;
         
     int mn = *min_element(sequence.begin(), sequence.end());
     int mx = *max_element(sequence.begin(), sequence.end());
 
-    waveletTree* nodeToInit = new waveletTree(mn, mx);
+    WaveletTree* nodeToInit = new waveletTree(mn, mx);
 
     init(nodeToInit, sequence);
 
     return nodeToInit;
 }
 
-int equalTo(int q, int l, int r, waveletTree* cur = root) {
+int equalTo(int q, int l, int r, WaveletTree* cur = root) {
     if (l != 1)
         return equalTo(q, 1, r) - equalTo(q, 1, l - 1);
 
@@ -75,7 +75,7 @@ int equalTo(int q, int l, int r, waveletTree* cur = root) {
         return equalTo(q, l, cur -> mapRight(r - 1), cur ->right);
 }
 
-int lessThan(int q, int l, int r, waveletTree* cur = root) {
+int lessThan(int q, int l, int r, WaveletTree* cur = root) {
     if(l != 1)
         return lessThan(q, 1, r) - lessThan(q, 1, l-1);
 

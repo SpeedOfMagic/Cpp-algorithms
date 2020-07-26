@@ -1,14 +1,13 @@
-const int daysInMonth[13] = {-1, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-const string startingDate = "1970-01-01";
-
-bool leap(int year) { return (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)); }
-
 struct Date {
     int day;
     int month;
     int year;
 
-    int getDaysInMonth() { return daysInMonth[month] + (month == 2 && leap(year)); }
+    const int kDaysInMonth[13] = {-1, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+    int getDaysInMonth() { return kDaysInMonth[month] + (month == 2 && leap(year)); }
+
+    bool leap(int year) { return (year % 400 == 0 || (year % 100 != 0 && year % 4 == 0)); }
 
     int countDays() {
         int res = 0;
@@ -16,7 +15,7 @@ struct Date {
             res += 365 + leap(i);
 
         for (int i = 1; i < month; i++)
-            res += daysInMonth[i] + (i == 2 && leap(year));
+            res += kDaysInMonth[i] + (i == 2 && leap(year));
 
         res += day;
 

@@ -1,8 +1,10 @@
-struct segTree {
-    const int nothing = -1e9;
-    vector<int> val;
-    int n;
+class SegmentTree {
+private:
+    const int nothing_ = -1e9;
+    vector<int> val_;
+    int n_;
 
+public:
     inline int f(int a, int b) { return max(a, b); }
 
     void update(int pos, int value) {
@@ -23,12 +25,12 @@ struct segTree {
 				 query(max(l, mid + 1), r, cur << 1 | 1, mid + 1, rr));
     }
 	
-	segTree(int _n) {
+	SegmentTree(int _n) {
 		for (n = _n; n & (n - 1); n++) {}
         val = vector<int>(n * 2, nothing);
 	}
 
-    segTree(vector<int> arr) {
+    SegmentTree(vector<int> arr) {
         for (n = arr.size(); n & (n - 1); n++) {}
         val = vector<int>(n * 2, nothing);
         for (int i = n + arr.size() - 1; i; i--)

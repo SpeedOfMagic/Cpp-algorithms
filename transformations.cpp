@@ -1,4 +1,4 @@
-string inttostr(int a) {
+string IntToString(int a) {
     if(a == 0)
         return "0";
     
@@ -10,7 +10,7 @@ string inttostr(int a) {
     return res;
 }
 
-int strtoint(const string& a) {
+int StringToInt(const string& a) {
     int res = 0;
     for (char i : a)
         res = res * 10 + (i - '0');
@@ -18,7 +18,7 @@ int strtoint(const string& a) {
     return res;
 }
 
-double strtod(const string& a) {
+double StringToDouble(const string& a) {
     double res = 0;
     double afterDot = 1;
     bool dotBegins = 0;
@@ -35,10 +35,10 @@ double strtod(const string& a) {
     return res / afterDot;
 }
 
-const unsigned int requiredLength = 30;
-string inttobinary(int a) {
-    string res = "";
+string IntToBinary(int a) {
+    const unsigned int kRequiredLength = 32;
     
+    string res = "";
     if (a == 0)
         res = "0";
     
@@ -56,7 +56,7 @@ string inttobinary(int a) {
     return res;
 }
 
-int binarytoint(const string& a){
+int BinaryToInt(const string& a){
     int res = 0;
     int curPow = 0;
 
