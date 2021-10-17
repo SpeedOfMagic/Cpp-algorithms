@@ -26,5 +26,5 @@ std::vector<int> make_sufarray(string s) {
             c[p[j]] = j ? (c[p[j - 1]] + (elems[j - 1] < elems[j])) : 0;
         }
     }
-    return pw;
+    return p;
 }
