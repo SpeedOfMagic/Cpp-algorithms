@@ -1,25 +1,35 @@
 class FenwickTree {
 private:
-    vector<int> tree_;
-
-    static inline size_t lsb(size_t a) noexcept { return a & -a; }
+    vector<int64_t> tree_;
 
 public:
-    explicit FenwickTree(int n) : tree_(vector<int>(n, 0)) {}
+    FenwickTree() = default;
+    explicit FenwickTree(int n) : tree_(vector<int64_t>(n, 0)) {}
+    explicit FenwickTree(const vector<int>& arr) {
+        tree_.resize(arr.size(), 0);
+        for (size_t i = 0; i < arr.size(); ++i) {
+            add(i, arr[i]);
+        }
+    }
 
-    [[nodiscard]] inline int query(size_t r) const noexcept {
-        int res = 0;
-        for (; r > 0; r -= lsb(r))
+    [[nodiscard]] inline int64_t query(int r) const noexcept {
+        int64_t res = 0;
+        for (; r >= 0; r = (r & (r+1)) - 1)
             res += tree_[r];
         return res;
     }
 
-    [[nodiscard]] inline int query(size_t l, size_t r) const noexcept {
-        return query(r) - query(l - 1);
+    [[nodiscard]] inline int64_t query(int l, int r) const noexcept {
+        return l == 0 ? query(r) : query(r) - query(l - 1);
     }
 
-    inline void update(size_t pos, int change) {
-        for (; pos < tree_.size(); pos += lsb(pos))
+    [[nodiscard]] inline size_t size() const noexcept {
+        return tree_.size();
+    }
+
+    inline void add(size_t pos, int64_t change) {
+        for (; pos < tree_.size(); pos = pos | (pos + 1)) {
             tree_[pos] += change;
+        }
     }
 };
