@@ -1,49 +1,69 @@
-const int N = 1e5 + 1;
-vector<int> t[N]; //init me
+class LeastCommonAncestor {
+private:
+    using Tree = vector<vector<int>>;
 
-int h[N];
-const int M = 17;
-vector<vector<int>> kthAncestor(N, vector<int>(M, -1));
-inline void precalc(int cur = 1, int p = -1) {
-    h[cur] = (p != -1) ? (h[p] + 1) : 0;
-    for (int k = 0, d = p; d != -1; k++) {
-        kthAncestor[cur][k] = d;
-        d = kthAncestor[d][k];
+    vector<vector<int>> kth_ancestor_;
+    vector<int> height_;
+
+    inline void FillHeightKthAncestor(const Tree& tree, int cur, int p) {
+        height_[cur] = (p != -1) ? (height_[p] + 1) : 0;
+        for (int k = 0, d = p; d != -1; k++) {
+            kth_ancestor_[cur][k] = d;
+            d = kth_ancestor_[d][k];
+        }
+
+        for (int next : tree[cur]) {
+            if (next != p) {
+                FillHeightKthAncestor(tree, next, cur);
+            }
+        }
     }
 
-    for (int i : t[cur])
-        if (i != p)
-            precalc(i, cur);
-}
+public:
+    LeastCommonAncestor(const Tree& tree) {
+        int log_size = 0;
+        while ((1 << log_size) <= tree.size()) {
+            ++log_size;
+        }
 
-inline int lca(int v, int u) {
-    if (h[v] > h[u])
-        swap(v, u);
+        kth_ancestor_ .resize(tree.size(), vector<int>(log_size, -1));
+        height_.resize(tree.size());
 
-    for (int k = 0, d = h[u] - h[v]; d; k++, d >>= 1)
-        if (d & 1)
-            u = kthAncestor[u][k];
+        FillHeightKthAncestor(tree, 1, -1);
+    }
 
-    for (int k = M - 1; u != v;)
-        if (kthAncestor[u][k] != kthAncestor[v][k] || !k) {
-            u = kthAncestor[u][k];
-            v = kthAncestor[v][k];
-        } else
-            k--;
-    return u;
-}
+    inline int LCA(int v, int u) {
+        if (height_[v] > height_[u])
+            swap(v, u);
 
-int dist(int v, int u) { return h[v] + h[u] - 2 * h[lca(v, u)]; }
+        for (int k = 0, d = height_[u] - height_[v]; d; k++, d >>= 1)
+            if (d & 1)
+                u = kth_ancestor_[u][k];
 
-int getKthAncestor(int v, unsigned int distance) {
-    for (int k = 0; distance && k < M; k++, distance >>= 1)
-        if (distance & 1)
-            v = kthAncestor[v][k];
-    return v;
-}
+        for (int k = kth_ancestor_[0].size() - 1; u != v;)
+            if (kth_ancestor_[u][k] != kth_ancestor_[v][k] || !k) {
+                u = kth_ancestor_[u][k];
+                v = kth_ancestor_[v][k];
+            }
+            else
+                k--;
+        return u;
+    }
 
-inline bool isAncestor(int posAncestor, int v) {
-    if (h[v] < h[posAncestor])
-        return 0;
-    return getKthAncestor(v, h[v] - h[posAncestor]) == posAncestor;
-}
+    int Dist(int v, int u) { return height_[v] + height_[u] - 2 * height_[LCA(v, u)]; }
+
+    int GetKthAncestor(int v, unsigned int distance) {
+        for (int k = 0; distance && k < kth_ancestor_[0].size(); ++k, distance >>= 1) {
+            if (distance & 1) {
+                v = kth_ancestor_[v][k];
+            }
+        }
+        return v;
+    }
+
+    inline bool IsAncestor(int posAncestor, int v) {
+        if (height_[v] < height_[posAncestor])
+            return 0;
+        return GetKthAncestor(v, height_[v] - height_[posAncestor]) == posAncestor;
+    }
+};

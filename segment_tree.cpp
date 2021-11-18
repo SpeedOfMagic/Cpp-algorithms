@@ -1,6 +1,6 @@
 class SegmentTree {
 private:
-    const int nothing = -1e9;
+    const int nothing = 0;
     vector<int> val;
     size_t n;
 

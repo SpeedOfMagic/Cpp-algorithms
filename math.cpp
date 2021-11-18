@@ -12,7 +12,7 @@ bool prime(int a) {
     for (int b = 2; b * b <= a; b++)
         if (a % b == 0)
             return false;
-    return a < 2;
+    return a >= 2;
 }
 
 vector<int> divisors(int a) {
@@ -25,6 +25,21 @@ vector<int> divisors(int a) {
         }
     }
     return result;
+}
+
+vector<pair<int, int>> PrimeDecomposition(int num) {
+    vector<pair<int, int>> ans;
+    for (int i = 2; i * i <= num; ++i) {
+        if (num % i == 0) {
+            ans.push_back({i, 0});
+            while (num % i == 0) {
+                ++ans.back().second;
+                num /= i;
+            }
+        }
+    }
+    if (num != 1) ans.push_back({num, 1});
+    return ans;
 }
 
 int euler(int d) {
@@ -45,40 +60,33 @@ int euler(int d) {
     return res;
 }
 
-const int mod = 1'000'000'007;
-
-int pow(int a, int b) {
+int Pow(int a, int b, int mod) {
     if (b == 0)
         return 1 % mod;
     else if (b % 2)
-        return (a * pow(a, b - 1)) % mod;
+        return (a * Pow(a, b - 1, mod)) % mod;
 
-    int res = pow(a, b / 2);
+    int res = Pow(a, b / 2, mod);
     return (res * res) % mod;
 }
 
-//uses pow
-int inv(int a) { return pow(a, mod - 2); }
+int Inverse(int a, int mod) { return Pow(a, mod - 2, mod); }
 
-vector<int> factorials = {1};
-vector<int> invFactorials = {1};
-void initFactorials(unsigned int n) { //calculates [1! % mod, 2! % mod, ... , n! % mod]
-    for (unsigned int i = factorials.size(); i <= n; i++) {
-        int d = factorials.back();
-        factorials.push_back((d * i) % mod);
-    }
+vector<int> factorials = { 1 };
+vector<int> inverse_factorials = { 1 };
+void FillFactorials(uint32_t n, int mod) {
+    for (unsigned int i = factorials.size(); i <= n; i++)
+        factorials.push_back((factorials.back() * i) % mod);
 }
 
-//uses initFactorials, inv;
-void initInvFactorials(unsigned int n) {
-    initFactorials(n);
-    for (unsigned int i = invFactorials.size(); i <= n; i++)
-        invFactorials.push_back(inv(factorials[i]));
+void FillInverseFactorials(uint32_t n, int mod) {
+    FillFactorials(n, mod);
+    for (unsigned int i = inverse_factorials.size(); i <= n; i++)
+        inverse_factorials.push_back(Inverse(factorials[i], mod));
 }
 
-//uses initFactorials, initInvFactorials;
-int c(int k, int n) {
-    initInvFactorials(n);    
-    return ((factorials[n] * invFactorials[k]) % mod * invFactorials[n - k]) % mod;
+int C(int k, int n, int mod) {
+    FillInverseFactorials(n, mod);
+    return ((factorials[n] * inverse_factorials[k]) % mod 
+        * inverse_factorials[n - k]) % mod;
 }
-

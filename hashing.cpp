@@ -39,7 +39,7 @@ class RingNumber {
 
 class Hasher : public vector<RingNumber> {
  private:
-    const constexpr static RingNumber base_ = 13;
+    const constexpr static RingNumber base_ = 31;
     inline static vector<RingNumber> pow_of_base_;
 
  public:
