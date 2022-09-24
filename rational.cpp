@@ -79,8 +79,6 @@ class Rational {
     }
 };
 
-(x^5+x+1)
-
 Rational operator+(int o, const Rational& c) { return Rational(o) + c; }
 Rational operator-(int o, const Rational& c) { return Rational(o) - c; }
 Rational operator*(int o, const Rational& c) { return Rational(o) * c; }

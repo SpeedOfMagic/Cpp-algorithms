@@ -1,5 +1,14 @@
-using Graph = vector<vector<int>>;
+struct Edge {
+    int u, v, w;
+
+    bool operator<(const Edge& other) const {
+        return w < other.w;
+    }
+};
+
+using Graph = vector<vector<Edge>>;
 using Tree = Graph;
+
 
 struct PathGetter {
     const Graph& g_;
@@ -58,3 +67,31 @@ struct DistanceCalculator {
         return dist;
     }
 };
+
+bool IsBipartite(const Graph& g, vector<char>* ans_color = nullptr) {
+    vector<char> color(g.size(), -1);
+    for (size_t to_check = 0; to_check < g.size(); ++to_check) {
+        if (color[to_check] == -1) {
+            color[to_check] = 0;
+            queue<int> bfs;
+            bfs.push(to_check);
+            while (!bfs.empty()) {
+                int cur = bfs.front();
+                bfs.pop();
+                for (int nxt : g[cur]) {
+                    if (color[nxt] == color[cur]) {
+                        return false;
+                    }
+                    if (color[nxt] == -1) {
+                        color[nxt] = 1 - color[cur];
+                        bfs.push(nxt);
+                    }
+                }
+            }
+        }
+    }
+    if (ans_color != nullptr) {
+        *ans_color = std::move(color);
+    }
+    return true;
+}

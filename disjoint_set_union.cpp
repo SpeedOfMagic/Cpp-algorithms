@@ -10,9 +10,9 @@ public:
         return (ancestor_[a] == a) ? a : ancestor_[a] = Find(ancestor_[a]);
     }
 
-    void Unite(int a, int b) {
+    bool Unite(int a, int b) {
         if (IsConnected(a, b))
-            return;
+            return false;
 
         a = Find(a);
         b = Find(b);
@@ -22,6 +22,7 @@ public:
         ancestor_[a] = b;
         sizes_[b] += sizes_[a];
         --components_count_;
+        return true;
     }
 
     inline bool IsConnected(int a, int b) { return Find(a) == Find(b); }
@@ -64,18 +65,22 @@ public:
         return (ancestor_[a] == a) ? a : Find(ancestor_[a]);
     }
 
-    void Unite(int a, int b) {
+    bool Unite(int a, int b) {
         a = Find(a);
         b = Find(b);
+        queries_.emplace_back(a, b, a != b);
 
-        if (a != b) {
-            if (sizes_[a] > sizes_[b])
-                swap(a, b);
-            ancestor_[a] = b;
-            sizes_[b] += sizes_[a];
-            --components_count_;
+        if (a == b) {
+            return false;
         }
-        queries_.push_back({ a, b, a != b });
+
+		if (sizes_[a] > sizes_[b]) {
+			swap(a, b);
+        }
+		ancestor_[a] = b;
+		sizes_[b] += sizes_[a];
+		--components_count_;
+        return true;
     }
 
     void Revert() {
