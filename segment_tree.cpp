@@ -8,7 +8,7 @@ public:
     static inline int op(int a, int b) { return a + b; }
 
     void update(int pos, int value) {
-        size_t cur = val.size() + pos - 1;
+        size_t cur = n + pos - 1;
         for (val[cur] = value, cur >>= 1; cur; cur >>= 1)
             val[cur] = op(val[cur << 1], val[cur << 1 | 1]);
     }
