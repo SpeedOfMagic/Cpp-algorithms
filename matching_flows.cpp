@@ -10,6 +10,8 @@ private:
         if (used[v])  return false;
         used[v] = true;
         for (int to : g[v]) {
+			// If matched[to] == -1, then we can use it
+			// Otherwise we try to find matching for vertex it's currently matched to
             if (matched[to] == -1 || TryKuhn(matched[to])) {
                 matched[to] = v;
                 return true;
@@ -26,6 +28,7 @@ public:
     , used(vector<char>(g.size(), false))
     {}
  
+	// If zeroIfNotPerfect is set, answer is 0 or perfect matching size, but it also speeds up code 
     int CalcMatchingSize(bool zeroIfNotPerfect = false) {
         int ans = 0;
  
@@ -58,6 +61,7 @@ public:
         return ans;
     }
  
+	// If noneIfNotPerfect is set, answer is {} or perfect matching, but it also speeds up code
     vector<pair<int, int>> CalcMatching(bool noneIfNotPerfect = false) {
         vector<pair<int, int>> matching;
         matching.reserve(CalcMatchingSize(noneIfNotPerfect));
