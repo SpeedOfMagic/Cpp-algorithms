@@ -148,3 +148,61 @@ template <class T = int> struct Dinic {
         return flow;
     }
 };
+
+vector<pair<int, int>> MinCut(int n, const vector<pair<int, int>>& edges) {
+    Dinic d(n, 0, n - 1);
+    for (pair<int, int> e : edges) {
+        d.addEdge(e.first, e.second, 1, false);
+    }
+    int ans = d.calc();
+
+    vector<pair<int, int>> ans_e, cur_e;
+    for (size_t i = 0; i < edges.size(); ++i) {
+        Dinic d2(n, 0, n - 1);
+        for (pair<int, int> e : cur_e) {
+            d2.addEdge(e.first, e.second, 1, false);
+        }
+        for (size_t j = i + 1; j < edges.size(); ++j) {
+            d2.addEdge(edges[j].first, edges[j].second, 1, false);
+        }
+        int pos = d2.calc();
+        if (ans > pos) {
+            ans_e.push_back(edges[i]);
+            --ans;
+        } else {
+            cur_e.push_back(edges[i]);
+        }
+    }
+    return ans_e;
+}
+
+// Vertexes of second part must be distinct from vertexes in the first part
+// n - all vertexes from first and second part
+vector<pair<int, int>> DinicMatching(int n, const vector<pair<int, int>>& edges) {
+    const int start = n, finish = n + 1;
+    Dinic<> d(n + 2, start, finish);
+    set<int> first_part, second_part;
+    for (pair<int, int> e : edges) {
+        first_part.insert(e.first);
+        second_part.insert(e.second);
+        d.addEdge(e.first, e.second, 1);
+    }
+    for (int v : first_part) {
+        d.addEdge(start, v, 1);
+    }
+    for (int v : second_part) {
+        d.addEdge(v, finish, 1);
+    }
+    size_t matching_size = d.calc();
+    vector<pair<int, int>> ans;
+    ans.reserve(matching_size);
+    for (int i = 0; i < n; ++i) {
+        for (const auto& e : d.adj[i]) {
+            if (e.to != finish && e.flow == 1) {
+                ans.emplace_back(i, e.to);
+            }
+        }
+    }
+    assert(matching_size == ans.size());
+    return ans;
+}
