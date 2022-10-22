@@ -1,5 +1,6 @@
 using Graph = vector<vector<int>>;
 
+// Complexity of CalcMatchingSize (Kuhn algorithm): O(nm), but in reality it's faster
 class KuhnMatching {
 private:
     const Graph& g;
@@ -80,6 +81,7 @@ public:
 
 // Most of the code was used here: https://gist.github.com/Chillee/ad2110fc17af453fb6fc3357a78cfd28
 // I rewrote some things to support initialization and removed non-scaling
+// Complexity of calc(): O(nm log U), where U = 2^30
 template <class T = int> struct Dinic {
     int lim = 1;
     const T INF = numeric_limits<T>::max();
@@ -149,6 +151,7 @@ template <class T = int> struct Dinic {
     }
 };
 
+// Complexity: O(n^2m^2)
 vector<pair<int, int>> MinCut(int n, const vector<pair<int, int>>& edges) {
     Dinic d(n, 0, n - 1);
     for (pair<int, int> e : edges) {
@@ -178,6 +181,7 @@ vector<pair<int, int>> MinCut(int n, const vector<pair<int, int>>& edges) {
 
 // Vertexes of second part must be distinct from vertexes in the first part
 // n - all vertexes from first and second part
+// Complexity: O(m * sqrt(n))
 vector<pair<int, int>> DinicMatching(int n, const vector<pair<int, int>>& edges) {
     const int start = n, finish = n + 1;
     Dinic<> d(n + 2, start, finish);

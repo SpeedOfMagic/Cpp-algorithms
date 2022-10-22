@@ -19,7 +19,7 @@ struct BigInteger {
 
 	void operator=(BigInteger a) { dig = a.dig; }
 
-	BigInteger operator+(bigint a) const {
+	BigInteger operator+(const BigInteger& a) const {
 		vector<int> ans = dig;
 		bool carry = 0;
 		for (int i = 0; i < a.dig.size(); i++) {
@@ -36,7 +36,7 @@ struct BigInteger {
 		return BigInteger(ans);
 	}
 
-	BigInteger operator*(bigint a) const {
+	BigInteger operator*(const BigInteger& a) const {
 		vector<int> ans = vector<int>(a.dig.size() + dig.size(), 0);
 		for (int i = 0; i < dig.size(); i++)
 			for (int j = 0; j < a.dig.size(); j++)
@@ -54,7 +54,7 @@ struct BigInteger {
 		return ans;
 	}
 
-	bool operator<(BigInteger a) const {
+	bool operator<(const BigInteger& a) const {
 		if (a.dig.size() < dig.size())
 			return 0;
 		else if (dig.size() < a.dig.size())
