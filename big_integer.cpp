@@ -1,3 +1,5 @@
+
+
 struct BigInteger {
 	const int b = 1000000000;
 	vector<int> dig = {0};
@@ -17,19 +19,21 @@ struct BigInteger {
 		dig.push_back(0);
 	}
 
-	void operator=(BigInteger a) { dig = a.dig; }
+	void operator=(BigInteger a)  { dig = a.dig; }
 
-	BigInteger operator+(const BigInteger& a) const {
+	BigInteger operator+(const BigInteger& other) const {
 		vector<int> ans = dig;
-		bool carry = 0;
-		for (int i = 0; i < a.dig.size(); i++) {
-			if (ans.size() < i)
-				ans.push_back(0);
-			if (carry)
-				ans.back()++;
+		bool carry = false;
+		for (size_t i = 0; i < other.dig.size(); i++) {
+			if (i == ans.size()) {
+                ans.push_back(0);
+            }
+			if (carry) {
+                ++ans[i];
+            }
 
-			carry = ans.back() + a.dig[i] >= b;
-			ans.back() = (ans.back() + a.dig[i]) % b;
+			carry = ans[i] + other.dig[i] >= b;
+			ans[i] = (ans[i] + other.dig[i]) % b;
 		}
 		if (carry)
 			ans.push_back(1);
@@ -38,12 +42,12 @@ struct BigInteger {
 
 	BigInteger operator*(const BigInteger& a) const {
 		vector<int> ans = vector<int>(a.dig.size() + dig.size(), 0);
-		for (int i = 0; i < dig.size(); i++)
-			for (int j = 0; j < a.dig.size(); j++)
+		for (size_t i = 0; i < dig.size(); i++)
+			for (size_t j = 0; j < a.dig.size(); j++)
 				ans[i + j] += dig[i] * a.dig[j];
 
 		int carry = 0;
-		for (int i = 0; i < ans.size(); i++) {
+		for (size_t i = 0; i < ans.size(); i++) {
 			ans[i] += carry;
 			carry = ans[i] / b;
 			ans[i] %= b;
@@ -66,4 +70,18 @@ struct BigInteger {
 				return 1;
 		return 0;
 	}
+
+    friend ostream& operator<<(ostream& o, const BigInteger& num) {
+        bool leading_zeroes = true;
+        for (auto it = num.dig.rbegin(); it != num.dig.rend(); ++it) {
+            if ((*it) != 0) {
+                leading_zeroes = false;
+            }
+            if (leading_zeroes && (*it) == 0) {
+                continue;
+            }
+            o << (*it);
+        }
+        return o;
+    }
 };
